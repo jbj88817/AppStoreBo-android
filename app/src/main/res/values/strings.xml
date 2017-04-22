@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AppStoreBo</string>
+
+
+     <!--DrawLayout-->
+    <string name="app_update">App update</string>
+    <string name="notification_center">Notification Center</string>
+    <string name="setting">Setting</string>
+</resources>
