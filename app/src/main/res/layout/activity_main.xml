@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="us.bojie.appstorebo.MainActivity">
+    tools:context="us.bojie.appstorebo.ui.activity.MainActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -23,6 +23,22 @@
             android:theme="@style/AppTheme.ToolBar">
 
         </android.support.v7.widget.Toolbar>
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed">
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v4.view.ViewPager>
 
         <TextView
             android:layout_width="match_parent"

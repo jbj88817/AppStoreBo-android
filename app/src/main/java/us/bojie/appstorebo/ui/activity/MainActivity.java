@@ -1,8 +1,11 @@
-package us.bojie.appstorebo;
+package us.bojie.appstorebo.ui.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.ui.adapter.ViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     NavigationView mNavigationView;
     @BindView(R.id.tool_bar)
     Toolbar mToolBar;
+    @BindView(R.id.tab_layout)
+    TabLayout mTabLayout;
+    @BindView(R.id.view_pager)
+    ViewPager mViewPager;
 
     private View headerView;
 
@@ -31,28 +40,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-//        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
-//            @Override
-//            public void onDrawerSlide(View drawerView, float slideOffset) {
-//
-//            }
-//
-//            @Override
-//            public void onDrawerOpened(View drawerView) {
-//
-//            }
-//
-//            @Override
-//            public void onDrawerClosed(View drawerView) {
-//
-//            }
-//
-//            @Override
-//            public void onDrawerStateChanged(int newState) {
-//
-//            }
-//        });
+        initDrawerLayout();
+        initTabLayout();
+    }
 
+    private void initDrawerLayout() {
         headerView = mNavigationView.getHeaderView(0);
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,5 +80,12 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
 
         mDrawerLayout.addDrawerListener(drawerToggle);
+    }
+
+    private void initTabLayout() {
+
+        PagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }
