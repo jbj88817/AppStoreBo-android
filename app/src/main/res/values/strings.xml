@@ -9,4 +9,7 @@
     <string name="menu_search">Search</string>
     <string name="open">open</string>
     <string name="close">close</string>
+
+
+    <string name="app_size">%1$s MB</string>
 </resources>

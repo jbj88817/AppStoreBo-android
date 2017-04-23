@@ -6,7 +6,7 @@ import java.util.List;
  * Created by bojiejiang on 4/23/17.
  */
 
-public class PageBean {
+public class PageBean<T> {
 
     /**
      * hasMore : false
@@ -18,7 +18,7 @@ public class PageBean {
     private boolean hasMore;
     private int status;
     private String message;
-    private List<AppInfo> datas;
+    private List<T> datas;
 
     public boolean isHasMore() {
         return hasMore;
@@ -44,11 +44,11 @@ public class PageBean {
         this.message = message;
     }
 
-    public List<AppInfo> getDatas() {
+    public List<T> getDatas() {
         return datas;
     }
 
-    public void setDatas(List<AppInfo> datas) {
+    public void setDatas(List<T> datas) {
         this.datas = datas;
     }
 }
