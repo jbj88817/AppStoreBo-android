@@ -15,12 +15,15 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
-import us.bojie.appstorebo.presenter.RecommendPresenter;
+import us.bojie.appstorebo.di.DaggerRecommendComponent;
+import us.bojie.appstorebo.di.RecommendModule;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
 import us.bojie.appstorebo.ui.adapter.RecommendAppAdapter;
 
@@ -32,19 +35,28 @@ public class RecommendFragment extends Fragment implements RecommendContract.Vie
     Unbinder unbinder;
 
     private RecommendAppAdapter mAdapter;
-    private ProgressDialog mProgressDialog;
-    private RecommendContract.Presenter mPresenter;
+
+    @Inject
+    ProgressDialog mProgressDialog;
+
+    @Inject
+    RecommendContract.Presenter mPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recommend, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mPresenter = new RecommendPresenter(this);
-        mProgressDialog = new ProgressDialog(getActivity());
+
+        DaggerRecommendComponent.builder()
+                .recommendModule(new RecommendModule(this))
+                .build()
+                .inject(this);
+
         initData();
         return view;
     }
+
 
     private void initData() {
         mPresenter.requestData();
