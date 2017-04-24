@@ -17,7 +17,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
-import us.bojie.appstorebo.http.ApiService;
+import us.bojie.appstorebo.data.http.ApiService;
 
 /**
  * Created by bojiejiang on 4/23/17.

@@ -1,10 +1,11 @@
-package us.bojie.appstorebo.di;
+package us.bojie.appstorebo.di.module;
 
 import android.app.ProgressDialog;
 
 import dagger.Module;
 import dagger.Provides;
 import us.bojie.appstorebo.data.RecommendModel;
+import us.bojie.appstorebo.data.http.ApiService;
 import us.bojie.appstorebo.presenter.RecommendPresenter;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
 import us.bojie.appstorebo.ui.fragment.RecommendFragment;
@@ -28,8 +29,8 @@ public class RecommendModule {
     }
 
     @Provides
-    public RecommendModel provideModel() {
-        return new RecommendModel();
+    public RecommendModel provideModel(ApiService apiService) {
+        return new RecommendModel(apiService);
     }
 
     @Provides

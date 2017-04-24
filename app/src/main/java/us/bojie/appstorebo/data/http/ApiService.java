@@ -1,4 +1,4 @@
-package us.bojie.appstorebo.http;
+package us.bojie.appstorebo.data.http;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

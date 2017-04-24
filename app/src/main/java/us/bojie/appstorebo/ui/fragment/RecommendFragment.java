@@ -20,10 +20,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import us.bojie.appstorebo.AppApplication;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
-import us.bojie.appstorebo.di.DaggerRecommendComponent;
-import us.bojie.appstorebo.di.RecommendModule;
+import us.bojie.appstorebo.di.component.AppComponent;
+import us.bojie.appstorebo.di.component.DaggerRecommendComponent;
+import us.bojie.appstorebo.di.module.RecommendModule;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
 import us.bojie.appstorebo.ui.adapter.RecommendAppAdapter;
 
@@ -48,7 +50,10 @@ public class RecommendFragment extends Fragment implements RecommendContract.Vie
         View view = inflater.inflate(R.layout.fragment_recommend, container, false);
         unbinder = ButterKnife.bind(this, view);
 
+        AppComponent appComponent = ((AppApplication) getActivity().getApplication()).getAppComponent();
+
         DaggerRecommendComponent.builder()
+                .appComponent(appComponent)
                 .recommendModule(new RecommendModule(this))
                 .build()
                 .inject(this);

@@ -3,8 +3,7 @@ package us.bojie.appstorebo.data;
 import retrofit2.Callback;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.PageBean;
-import us.bojie.appstorebo.http.ApiService;
-import us.bojie.appstorebo.http.HttpManager;
+import us.bojie.appstorebo.data.http.ApiService;
 
 /**
  * Created by bojiejiang on 4/23/17.
@@ -12,10 +11,14 @@ import us.bojie.appstorebo.http.HttpManager;
 
 public class RecommendModel {
 
-    public void getApps(Callback<PageBean<AppInfo>> callback) {
-        HttpManager manager = new HttpManager();
-        ApiService apiService = manager.getRetrofit(manager.getOkHttpClient()).create(ApiService.class);
+    private ApiService mApiService;
 
-        apiService.getApps("{\"page\":0}").enqueue(callback);
+    public RecommendModel(ApiService apiService) {
+        mApiService = apiService;
+    }
+
+    public void getApps(Callback<PageBean<AppInfo>> callback) {
+
+        mApiService.getApps("{\"page\":0}").enqueue(callback);
     }
 }
