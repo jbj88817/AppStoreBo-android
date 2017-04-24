@@ -6,7 +6,6 @@ import dagger.Module;
 import dagger.Provides;
 import us.bojie.appstorebo.data.RecommendModel;
 import us.bojie.appstorebo.data.http.ApiService;
-import us.bojie.appstorebo.presenter.RecommendPresenter;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
 import us.bojie.appstorebo.ui.fragment.RecommendFragment;
 
@@ -31,12 +30,6 @@ public class RecommendModule {
     @Provides
     public RecommendModel provideModel(ApiService apiService) {
         return new RecommendModel(apiService);
-    }
-
-    @Provides
-    public RecommendContract.Presenter providePresenter(RecommendContract.View view,
-                                                        RecommendModel model) {
-        return new RecommendPresenter(view, model);
     }
 
     @Provides

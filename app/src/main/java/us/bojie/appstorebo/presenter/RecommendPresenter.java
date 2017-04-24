@@ -1,5 +1,7 @@
 package us.bojie.appstorebo.presenter;
 
+import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -12,17 +14,15 @@ import us.bojie.appstorebo.presenter.contract.RecommendContract;
  * Created by bojiejiang on 4/23/17.
  */
 
-public class RecommendPresenter implements RecommendContract.Presenter {
+public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendContract.View> {
 
-    private RecommendContract.View mView;
-    private RecommendModel mModel;
 
-    public RecommendPresenter(RecommendContract.View view, RecommendModel model) {
-        mView = view;
-        mModel = model;
+    @Inject
+    public RecommendPresenter(RecommendModel model, RecommendContract.View view) {
+        super(model, view);
     }
 
-    @Override
+
     public void requestData() {
         mView.showLoading();
         mModel.getApps(new Callback<PageBean<AppInfo>>() {

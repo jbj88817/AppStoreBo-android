@@ -1,16 +1,10 @@
 package us.bojie.appstorebo.ui.fragment;
 
 import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.List;
@@ -18,59 +12,44 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
-import us.bojie.appstorebo.AppApplication;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.di.component.DaggerRecommendComponent;
 import us.bojie.appstorebo.di.module.RecommendModule;
+import us.bojie.appstorebo.presenter.RecommendPresenter;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
 import us.bojie.appstorebo.ui.adapter.RecommendAppAdapter;
 
 
-public class RecommendFragment extends Fragment implements RecommendContract.View {
+public class RecommendFragment extends BaseFragment<RecommendPresenter> implements RecommendContract.View {
 
     @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
-    Unbinder unbinder;
 
     private RecommendAppAdapter mAdapter;
 
     @Inject
     ProgressDialog mProgressDialog;
 
-    @Inject
-    RecommendContract.Presenter mPresenter;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recommend, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    public int setLayout() {
+        return R.layout.fragment_recommend;
+    }
 
-        AppComponent appComponent = ((AppApplication) getActivity().getApplication()).getAppComponent();
-
+    @Override
+    public void setupActivityComponent(AppComponent appComponent) {
         DaggerRecommendComponent.builder()
                 .appComponent(appComponent)
                 .recommendModule(new RecommendModule(this))
                 .build()
                 .inject(this);
-
-        initData();
-        return view;
-    }
-
-
-    private void initData() {
-        mPresenter.requestData();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void init() {
+        mPresenter.requestData();
     }
 
 

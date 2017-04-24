@@ -3,7 +3,6 @@ package us.bojie.appstorebo.presenter.contract;
 import java.util.List;
 
 import us.bojie.appstorebo.bean.AppInfo;
-import us.bojie.appstorebo.presenter.BasePresenter;
 import us.bojie.appstorebo.ui.BaseView;
 
 /**
@@ -19,7 +18,7 @@ public interface RecommendContract {
         void showError(String msg);
     }
 
-    interface Presenter extends BasePresenter {
-        void requestData();
-    }
+//    interface Presenter extends BasePresenter {
+//        void requestData();
+//    }
 }

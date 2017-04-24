@@ -29,6 +29,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
 
+    // icons
+    compile 'com.mikepenz:iconics-core:2.8.3@aar'
+    compile 'com.mikepenz:ionicons-typeface:2.0.1.2@aar'
+
     // ButterKnife
     compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
