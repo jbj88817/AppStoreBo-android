@@ -56,4 +56,7 @@ dependencies {
     // Dagger2
     compile 'com.google.dagger:dagger:2.10'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+
+    // PathView
+    compile 'com.eftimoff:android-pathview:1.0.8@aar'
 }
