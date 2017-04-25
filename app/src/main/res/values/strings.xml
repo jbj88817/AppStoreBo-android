@@ -10,6 +10,10 @@
     <string name="open">open</string>
     <string name="close">close</string>
 
-
     <string name="app_size">%1$s MB</string>
+
+    <string name="guide_1">New Interface!</string>
+    <string name="guide_2">More apps!</string>
+    <string name="guide_3">Share with your Friends!</string>
+
 </resources>
