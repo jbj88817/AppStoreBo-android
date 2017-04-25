@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -16,17 +16,18 @@ import butterknife.ButterKnife;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.ui.adapter.GuideFragmentAdapter;
 import us.bojie.appstorebo.ui.fragment.GuideFragment;
+import us.bojie.appstorebo.ui.widget.CircleIndicator;
 
-public class GuideActivity extends AppCompatActivity {
+public class GuideActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     @BindView(R.id.viewpager)
     ViewPager mViewpager;
     @BindView(R.id.btn_enter)
     Button mBtnEnter;
-    @BindView(R.id.indicator)
-    LinearLayout mIndicator;
     @BindView(R.id.activity_guide)
     RelativeLayout mActivityGuide;
+    @BindView(R.id.indicator)
+    CircleIndicator mIndicator;
 
     private GuideFragmentAdapter mAdapter;
 
@@ -52,5 +53,21 @@ public class GuideActivity extends AppCompatActivity {
         mViewpager.setCurrentItem(0);
         mViewpager.setOffscreenPageLimit(mAdapter.getCount());
         mViewpager.setAdapter(mAdapter);
+        mViewpager.addOnPageChangeListener(this);
+        mIndicator.setViewPager(mViewpager);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mBtnEnter.setVisibility(position == mAdapter.getCount() - 1 ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

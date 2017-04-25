@@ -26,28 +26,18 @@
         android:textSize="16sp"
         android:visibility="gone"/>
 
-    <LinearLayout
+    <us.bojie.appstorebo.ui.widget.CircleIndicator
         android:id="@+id/indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
         android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        app:ci_drawable="@drawable/red_radius"
+        app:ci_drawable_unselected="@drawable/white_radius"
+        app:ci_height="15dp"
+        app:ci_width="15dp"
+        />
 
-
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="5dp"
-            android:src="@color/colorAccent"/>
-
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="5dp"
-            android:src="@color/colorAccent"/>
-
-    </LinearLayout>
 
 </RelativeLayout>
