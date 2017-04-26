@@ -5,4 +5,6 @@ package us.bojie.appstorebo.common;
  */
 
 public class Constant {
+
+    public static final String IS_SHOW_GUIDE = "IS_SHOW_GUIDE";
 }

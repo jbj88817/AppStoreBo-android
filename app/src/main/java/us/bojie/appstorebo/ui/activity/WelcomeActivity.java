@@ -10,6 +10,8 @@ import com.eftimoff.androipathview.PathView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.common.Constant;
+import us.bojie.appstorebo.common.util.ACache;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -36,7 +38,13 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void jump() {
-        startActivity(new Intent(this, MainActivity.class));
+        String isShowGuide = ACache.get(this).getAsString(Constant.IS_SHOW_GUIDE);
+
+        if (isShowGuide == null) {
+            startActivity(new Intent(this, GuideActivity.class));
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         finish();
     }
 }

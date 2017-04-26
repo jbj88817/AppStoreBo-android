@@ -1,5 +1,6 @@
 package us.bojie.appstorebo.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,7 +14,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.common.Constant;
+import us.bojie.appstorebo.common.util.ACache;
 import us.bojie.appstorebo.ui.adapter.GuideFragmentAdapter;
 import us.bojie.appstorebo.ui.fragment.GuideFragment;
 import us.bojie.appstorebo.ui.widget.CircleIndicator;
@@ -69,5 +73,12 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @OnClick(R.id.btn_enter)
+    public void onViewClicked() {
+        ACache.get(this).put(Constant.IS_SHOW_GUIDE, "0");
+        startActivity(new Intent(this, MainActivity.class));
+        this.finish();
     }
 }
