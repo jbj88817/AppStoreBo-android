@@ -46,7 +46,7 @@ public class RecommendAppAdapter extends RecyclerView.Adapter<RecommendAppAdapte
 
         AppInfo appInfo = mData.get(position);
         Picasso.with(mContext)
-                .load(ApiService.BASEIMGURL + appInfo.getIcon())
+                .load(ApiService.BASE_IMG_URL + appInfo.getIcon())
                 .placeholder(R.drawable.img_placeholder)
                 .into(holder.mImgIcon);
         holder.mTextTitle.setText(appInfo.getDisplayName());

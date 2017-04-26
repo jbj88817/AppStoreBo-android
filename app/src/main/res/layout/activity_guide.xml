@@ -18,11 +18,13 @@
     <Button
         android:id="@+id/btn_enter"
         android:layout_width="140dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_above="@+id/indicator"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
+        android:background="#2967ED"
         android:text="Try now!"
+        android:textColor="@color/color_white"
         android:textSize="16sp"
         android:visibility="gone"/>
 

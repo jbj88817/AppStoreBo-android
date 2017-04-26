@@ -58,6 +58,11 @@ public class GuideActivity extends AppCompatActivity implements ViewPager.OnPage
         mViewpager.setOffscreenPageLimit(mAdapter.getCount());
         mViewpager.setAdapter(mAdapter);
         mViewpager.addOnPageChangeListener(this);
+        mViewpager.setPageTransformer(false, new ViewPager.PageTransformer() {
+            public void transformPage(View page, float position) {
+                page.setRotationY(position * -30); // animation style... change as you want..
+            }
+        });
         mIndicator.setViewPager(mViewpager);
     }
 

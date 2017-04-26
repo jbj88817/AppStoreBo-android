@@ -1,6 +1,6 @@
 package us.bojie.appstorebo.data;
 
-import retrofit2.Callback;
+import io.reactivex.Observable;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.PageBean;
 import us.bojie.appstorebo.data.http.ApiService;
@@ -17,8 +17,10 @@ public class RecommendModel {
         mApiService = apiService;
     }
 
-    public void getApps(Callback<PageBean<AppInfo>> callback) {
+    public Observable<PageBean<AppInfo>> getApps() {
 
-        mApiService.getApps("{\"page\":0}").enqueue(callback);
+//        mApiService.getApps("{\"page\":0}").enqueue(callback);
+
+        return mApiService.getApps("{\"page\":0}");
     }
 }
