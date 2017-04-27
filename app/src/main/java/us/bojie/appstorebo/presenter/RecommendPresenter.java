@@ -1,15 +1,18 @@
 package us.bojie.appstorebo.presenter;
 
+import android.util.Log;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.PageBean;
+import us.bojie.appstorebo.common.rx.RxHttpReponseCompat;
 import us.bojie.appstorebo.data.RecommendModel;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
+
+import static com.mikepenz.iconics.Iconics.TAG;
 
 /**
  * Created by bojiejiang on 4/23/17.
@@ -27,33 +30,32 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
     public void requestData() {
 
         mModel.getApps()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxHttpReponseCompat.<PageBean<AppInfo>>compatResult())
                 .subscribe(new Observer<PageBean<AppInfo>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                mView.showLoading();
-            }
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mView.showLoading();
+                    }
 
-            @Override
-            public void onNext(PageBean<AppInfo> response) {
-                if (response != null) {
-                    mView.showResult(response.getDatas());
-                } else {
-                    mView.showNoData();
-                }
-            }
+                    @Override
+                    public void onNext(PageBean<AppInfo> appInfoPageBean) {
+                        if (appInfoPageBean != null) {
+                            mView.showResult(appInfoPageBean.getDatas());
+                        } else {
+                            mView.showNoData();
+                        }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                mView.showError(e.getMessage());
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "RecommendPresenter: ------");
+                    }
 
-            @Override
-            public void onComplete() {
-                mView.dismissLoading();
-            }
-        });
+                    @Override
+                    public void onComplete() {
+                        mView.dismissLoading();
+                    }
+                });
 
 //        mModel.getApps(new Callback<PageBean<AppInfo>>() {
 //            @Override

@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import us.bojie.appstorebo.bean.AppInfo;
+import us.bojie.appstorebo.bean.BaseBean;
 import us.bojie.appstorebo.bean.PageBean;
 
 /**
@@ -19,5 +20,5 @@ public interface ApiService {
 //    Call<PageBean<AppInfo>> getApps(@Query("p") String jsonParam);
 
     @GET("featured")
-    Observable<PageBean<AppInfo>> getApps(@Query("p") String jsonParam);
+    Observable<BaseBean<PageBean<AppInfo>>> getApps(@Query("p") String jsonParam);
 }
