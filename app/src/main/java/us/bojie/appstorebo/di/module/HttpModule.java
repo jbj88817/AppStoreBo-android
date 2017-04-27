@@ -1,5 +1,7 @@
 package us.bojie.appstorebo.di.module;
 
+import android.app.Application;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -11,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import us.bojie.appstorebo.common.rx.RxErrorHandler;
 import us.bojie.appstorebo.data.http.ApiService;
 
 /**
@@ -50,7 +53,14 @@ public class HttpModule {
     }
 
     @Provides
+    @Singleton
     public ApiService provideApiService(Retrofit retrofit) {
         return retrofit.create(ApiService.class);
+    }
+
+    @Provides
+    @Singleton
+    public RxErrorHandler provideRxErrorHandler(Application application) {
+        return new RxErrorHandler(application);
     }
 }

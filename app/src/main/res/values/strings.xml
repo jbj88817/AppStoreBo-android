@@ -16,4 +16,16 @@
     <string name="guide_2">More apps!</string>
     <string name="guide_3">Share with your Friends!</string>
 
+    <string name="error_unknown">Unknown Error</string>
+    <string name="error_http">Network Connecting Error</string>
+    <string name="error_system">Server Error</string>
+    <string name="error_account_freeze">Account freezed, please contact admin</string>
+    <string name="error_api_no_permission">No permission</string>
+    <string name="error_login">Username or Password Error</string>
+    <string name="error_http_400">Bad request</string>
+    <string name="error_http_404">Not found</string>
+    <string name="error_http_500">Internal server error</string>
+    <string name="error_socket_timeout">Timeout Error</string>
+    <string name="error_socket_unreachable">Network unreachable</string>
+
 </resources>
