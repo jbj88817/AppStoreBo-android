@@ -27,5 +27,6 @@
     <string name="error_http_500">Internal server error</string>
     <string name="error_socket_timeout">Timeout Error</string>
     <string name="error_socket_unreachable">Network unreachable</string>
+    <string name="loading">Loading...</string>
 
 </resources>

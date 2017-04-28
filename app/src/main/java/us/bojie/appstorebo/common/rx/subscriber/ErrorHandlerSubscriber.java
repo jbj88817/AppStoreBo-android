@@ -1,5 +1,7 @@
 package us.bojie.appstorebo.common.rx.subscriber;
 
+import android.content.Context;
+
 import us.bojie.appstorebo.common.exception.BaseException;
 import us.bojie.appstorebo.common.rx.RxErrorHandler;
 
@@ -9,10 +11,12 @@ import us.bojie.appstorebo.common.rx.RxErrorHandler;
 
 public abstract class ErrorHandlerSubscriber<T> extends DefaultSubscriber<T> {
 
-    private RxErrorHandler mRxErrorHandler;
+    private RxErrorHandler mRxErrorHandler = null;
+    private Context mContext;
 
-    public ErrorHandlerSubscriber(RxErrorHandler errorHandler) {
-        mRxErrorHandler = errorHandler;
+    public ErrorHandlerSubscriber(Context context) {
+        mContext = context;
+        mRxErrorHandler = new RxErrorHandler(mContext);
     }
 
     @Override

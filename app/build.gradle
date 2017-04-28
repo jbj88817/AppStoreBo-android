@@ -59,4 +59,6 @@ dependencies {
 
     // PathView
     compile 'com.eftimoff:android-pathview:1.0.8@aar'
+
+    compile 'cn.pedant.sweetalert:library:1.3'
 }
