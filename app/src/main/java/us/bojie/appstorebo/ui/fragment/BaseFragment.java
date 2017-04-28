@@ -1,5 +1,6 @@
 package us.bojie.appstorebo.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,12 +15,13 @@ import butterknife.Unbinder;
 import us.bojie.appstorebo.AppApplication;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.presenter.BasePresenter;
+import us.bojie.appstorebo.ui.BaseView;
 
 /**
  * Created by bojiejiang on 4/23/17.
  */
 
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
+public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements BaseView {
 
     private Unbinder mUnbinder;
     private AppApplication mApplication;
@@ -27,6 +29,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
 
     @Inject
     T mPresenter;
+    private ProgressDialog mProgressDialog;
 
     @Nullable
     @Override
@@ -58,4 +61,19 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment {
     public abstract void setupActivityComponent(AppComponent appComponent);
 
     public abstract void init();
+
+    @Override
+    public void showLoading() {
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setMessage("Loading....");
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void dismissLoading() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
 }

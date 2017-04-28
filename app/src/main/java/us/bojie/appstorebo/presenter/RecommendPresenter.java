@@ -2,12 +2,11 @@ package us.bojie.appstorebo.presenter;
 
 import javax.inject.Inject;
 
-import io.reactivex.disposables.Disposable;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.PageBean;
 import us.bojie.appstorebo.common.rx.RxErrorHandler;
 import us.bojie.appstorebo.common.rx.RxHttpReponseCompat;
-import us.bojie.appstorebo.common.rx.subscriber.ErrorHandlerSubscriber;
+import us.bojie.appstorebo.common.rx.subscriber.ProgressDialogSubcriber;
 import us.bojie.appstorebo.data.RecommendModel;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
 
@@ -31,24 +30,10 @@ public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendC
 
         mModel.getApps()
                 .compose(RxHttpReponseCompat.<PageBean<AppInfo>>compatResult())
-                .subscribe(new ErrorHandlerSubscriber<PageBean<AppInfo>>(mRxErrorHandler) {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        mView.showLoading();
-                    }
-
+                .subscribe(new ProgressDialogSubcriber<PageBean<AppInfo>>(mView, mRxErrorHandler) {
                     @Override
                     public void onNext(PageBean<AppInfo> value) {
-                        if (value != null) {
-                            mView.showResult(value.getDatas());
-                        } else {
-                            mView.showNoData();
-                        }
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        mView.dismissLoading();
+                        mView.showResult(value.getDatas());
                     }
                 });
     }
