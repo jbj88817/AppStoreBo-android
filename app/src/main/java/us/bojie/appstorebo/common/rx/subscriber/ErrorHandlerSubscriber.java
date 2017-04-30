@@ -11,7 +11,7 @@ import us.bojie.appstorebo.common.rx.RxErrorHandler;
 
 public abstract class ErrorHandlerSubscriber<T> extends DefaultSubscriber<T> {
 
-    private RxErrorHandler mRxErrorHandler = null;
+    protected RxErrorHandler mRxErrorHandler = null;
     private Context mContext;
 
     public ErrorHandlerSubscriber(Context context) {

@@ -1,6 +1,5 @@
 package us.bojie.appstorebo.ui.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,7 +28,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
 
     @Inject
     T mPresenter;
-    private ProgressDialog mProgressDialog;
+
 
     @Nullable
     @Override
@@ -64,16 +63,13 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
 
     @Override
     public void showLoading() {
-
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setMessage("Loading....");
-        mProgressDialog.show();
     }
 
     @Override
     public void dismissLoading() {
-        if (mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
-        }
+    }
+
+    @Override
+    public void showError(String msg) {
     }
 }

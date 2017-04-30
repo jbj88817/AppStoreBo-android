@@ -22,7 +22,7 @@ import us.bojie.appstorebo.presenter.contract.RecommendContract;
 import us.bojie.appstorebo.ui.adapter.RecommendAppAdapter;
 
 
-public class RecommendFragment extends BaseFragment<RecommendPresenter> implements RecommendContract.View {
+public class RecommendFragment extends ProgressFragment<RecommendPresenter> implements RecommendContract.View {
 
     @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
@@ -75,6 +75,11 @@ public class RecommendFragment extends BaseFragment<RecommendPresenter> implemen
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onEmptyViewClick() {
+        mPresenter.requestData();
     }
 
     @Override
