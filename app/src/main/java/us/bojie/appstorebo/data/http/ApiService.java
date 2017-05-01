@@ -1,14 +1,12 @@
 package us.bojie.appstorebo.data.http;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Query;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.BaseBean;
+import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.bean.PageBean;
-import us.bojie.appstorebo.bean.requestbean.LoginRequestBean;
 
 /**
  * Created by bojiejiang on 4/23/17.
@@ -25,7 +23,9 @@ public interface ApiService {
     @GET("featured2")
     Observable<BaseBean<PageBean<AppInfo>>> getApps(@Query("p") String jsonParam);
 
-    @POST("login")
-    Observable<BaseBean> login(@Body LoginRequestBean bean);
+    @GET("index")
+    Observable<BaseBean<IndexBean>> index();
 
+    @GET("toplist")
+    Observable<BaseBean<AppInfo>> toplist(@Query("page") int page);
 }

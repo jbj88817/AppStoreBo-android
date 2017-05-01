@@ -1,8 +1,6 @@
 package us.bojie.appstorebo.presenter.contract;
 
-import java.util.List;
-
-import us.bojie.appstorebo.bean.AppInfo;
+import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.ui.BaseView;
 
 /**
@@ -13,9 +11,7 @@ public interface RecommendContract {
 
     interface View extends BaseView {
 
-        void showResult(List<AppInfo> data);
-        void showNoData();
-        void showError(String msg);
+        void showResult(IndexBean indexBean);
         void onRequestPermissionSuccess();
         void onRequestPermissionError();
     }

@@ -30,4 +30,7 @@
     <string name="loading">Loading...</string>
     <string name="empty_data">No data, please come back soon.</string>
 
+    <string name="hot_game">Hot Games</string>
+    <string name="hot_top">Top items</string>
+    <string name="hot_app">Top apps</string>
 </resources>

@@ -3,6 +3,7 @@ package us.bojie.appstorebo.data;
 import io.reactivex.Observable;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.BaseBean;
+import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.bean.PageBean;
 import us.bojie.appstorebo.data.http.ApiService;
 
@@ -20,8 +21,10 @@ public class RecommendModel {
 
     public Observable<BaseBean<PageBean<AppInfo>>> getApps() {
 
-//        mApiService.getApps("{\"page\":0}").enqueue(callback);
-
         return mApiService.getApps("{\"page\":0}");
+    }
+
+    public Observable<BaseBean<IndexBean>> index() {
+        return mApiService.index();
     }
 }

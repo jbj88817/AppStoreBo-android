@@ -2,24 +2,21 @@ package us.bojie.appstorebo.ui.fragment;
 
 import android.app.ProgressDialog;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import us.bojie.appstorebo.R;
-import us.bojie.appstorebo.bean.AppInfo;
+import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.di.component.DaggerRecommendComponent;
 import us.bojie.appstorebo.di.module.RecommendModule;
 import us.bojie.appstorebo.presenter.RecommendPresenter;
 import us.bojie.appstorebo.presenter.contract.RecommendContract;
-import us.bojie.appstorebo.ui.adapter.RecommendAppAdapter;
+import us.bojie.appstorebo.ui.adapter.IndexMutilAdapter;
 
 
 public class RecommendFragment extends ProgressFragment<RecommendPresenter> implements RecommendContract.View {
@@ -27,7 +24,7 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
     @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
 
-    private RecommendAppAdapter mAdapter;
+    private IndexMutilAdapter mAdapter;
 
     @Inject
     ProgressDialog mProgressDialog;
@@ -49,20 +46,14 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
 
     @Override
     public void init() {
+        initRecycleView();
         mPresenter.requestData();
     }
 
 
-    private void initRecycleView(List<AppInfo> data) {
+    private void initRecycleView() {
         mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecycleView.setItemAnimator(new DefaultItemAnimator());
-
-        // Set line between each item
-        mRecycleView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-
-        mAdapter = new RecommendAppAdapter(getActivity(), data);
-        mRecycleView.setAdapter(mAdapter);
-
     }
 
     @Override
@@ -83,18 +74,10 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
     }
 
     @Override
-    public void showResult(List<AppInfo> data) {
-        initRecycleView(data);
-    }
-
-    @Override
-    public void showNoData() {
-        Toast.makeText(getActivity(), "No data", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showError(String msg) {
-        Toast.makeText(getActivity(), "Connection error: " + msg, Toast.LENGTH_SHORT).show();
+    public void showResult(IndexBean indexBean) {
+        mAdapter = new IndexMutilAdapter(getActivity());
+        mAdapter.setData(indexBean);
+        mRecycleView.setAdapter(mAdapter);
     }
 
     @Override
