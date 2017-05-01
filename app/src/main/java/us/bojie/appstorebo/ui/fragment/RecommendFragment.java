@@ -96,4 +96,14 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
     public void showError(String msg) {
         Toast.makeText(getActivity(), "Connection error: " + msg, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onRequestPermissionSuccess() {
+        mPresenter.requestData();
+    }
+
+    @Override
+    public void onRequestPermissionError() {
+        Toast.makeText(getActivity(), "Permission Denied!", Toast.LENGTH_SHORT).show();
+    }
 }

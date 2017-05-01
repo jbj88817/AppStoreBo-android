@@ -16,6 +16,8 @@ public interface RecommendContract {
         void showResult(List<AppInfo> data);
         void showNoData();
         void showError(String msg);
+        void onRequestPermissionSuccess();
+        void onRequestPermissionError();
     }
 
 //    interface Presenter extends BasePresenter {
