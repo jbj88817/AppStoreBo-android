@@ -2,6 +2,8 @@ package us.bojie.appstorebo.di.module;
 
 import android.app.Application;
 
+import com.google.gson.Gson;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -26,7 +28,7 @@ public class HttpModule {
 
     @Provides
     @Singleton
-    public OkHttpClient provideOkHttpClient() {
+    public OkHttpClient provideOkHttpClient(Application application, Gson gson) {
 
         // log interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -36,7 +38,7 @@ public class HttpModule {
 
         return new OkHttpClient.Builder()
                 .addInterceptor(logging)
-                .addInterceptor(new CommonparamsInterceptor())
+                .addInterceptor(new CommonparamsInterceptor(application, gson))
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
