@@ -13,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import us.bojie.appstorebo.common.http.CommonparamsInterceptor;
 import us.bojie.appstorebo.common.rx.RxErrorHandler;
 import us.bojie.appstorebo.data.http.ApiService;
 
@@ -35,6 +36,7 @@ public class HttpModule {
 
         return new OkHttpClient.Builder()
                 .addInterceptor(logging)
+                .addInterceptor(new CommonparamsInterceptor())
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
