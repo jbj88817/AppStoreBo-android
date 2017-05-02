@@ -113,7 +113,11 @@ public class IndexMutilAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             navIconViewHolder.mLayoutHotSubject.setOnClickListener(this);
         } else {
             AppViewHolder appViewHolder = (AppViewHolder) holder;
-            AppInfoAdapter adapter = new AppInfoAdapter();
+            AppInfoAdapter adapter = AppInfoAdapter.builder()
+                    .showBrief(true)
+                    .showCategoryName(false)
+                    .showPosition(false)
+                    .build();
             if (appViewHolder.type == TYPE_APPS) {
                 appViewHolder.mText.setText(R.string.hot_app);
                 adapter.addData(mIndexBean.getRecommendApps());

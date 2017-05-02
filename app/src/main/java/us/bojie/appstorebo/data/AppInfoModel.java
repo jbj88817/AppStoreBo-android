@@ -11,11 +11,11 @@ import us.bojie.appstorebo.data.http.ApiService;
  * Created by bojiejiang on 4/23/17.
  */
 
-public class RecommendModel {
+public class AppInfoModel {
 
     private ApiService mApiService;
 
-    public RecommendModel(ApiService apiService) {
+    public AppInfoModel(ApiService apiService) {
         mApiService = apiService;
     }
 
@@ -26,5 +26,9 @@ public class RecommendModel {
 
     public Observable<BaseBean<IndexBean>> index() {
         return mApiService.index();
+    }
+
+    public Observable<BaseBean<PageBean<AppInfo>>> toplist(int page) {
+        return mApiService.toplist(page);
     }
 }

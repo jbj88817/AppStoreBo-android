@@ -5,18 +5,18 @@ import javax.inject.Inject;
 import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.common.rx.RxHttpReponseCompat;
 import us.bojie.appstorebo.common.rx.subscriber.ProgressSubscriber;
-import us.bojie.appstorebo.data.RecommendModel;
-import us.bojie.appstorebo.presenter.contract.RecommendContract;
+import us.bojie.appstorebo.data.AppInfoModel;
+import us.bojie.appstorebo.presenter.contract.AppInfoContract;
 
 /**
  * Created by bojiejiang on 4/23/17.
  */
 
-public class RecommendPresenter extends BasePresenter<RecommendModel, RecommendContract.View> {
+public class RecommendPresenter extends BasePresenter<AppInfoModel, AppInfoContract.View> {
 
 
     @Inject
-    public RecommendPresenter(RecommendModel model, RecommendContract.View view) {
+    public RecommendPresenter(AppInfoModel model, AppInfoContract.View view) {
         super(model, view);
     }
 

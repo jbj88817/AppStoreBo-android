@@ -19,11 +19,11 @@ import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.di.component.DaggerRecommendComponent;
 import us.bojie.appstorebo.di.module.RecommendModule;
 import us.bojie.appstorebo.presenter.RecommendPresenter;
-import us.bojie.appstorebo.presenter.contract.RecommendContract;
+import us.bojie.appstorebo.presenter.contract.AppInfoContract;
 import us.bojie.appstorebo.ui.adapter.IndexMutilAdapter;
 
 
-public class RecommendFragment extends ProgressFragment<RecommendPresenter> implements RecommendContract.View {
+public class RecommendFragment extends ProgressFragment<RecommendPresenter> implements AppInfoContract.View {
 
     @BindView(R.id.recycle_view)
     RecyclerView mRecycleView;
@@ -36,7 +36,7 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
 
     @Override
     public int setLayout() {
-        return R.layout.fragment_recommend;
+        return R.layout.template_recycler_view;
     }
 
     @Override

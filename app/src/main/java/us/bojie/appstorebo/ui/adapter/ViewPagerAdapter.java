@@ -10,7 +10,7 @@ import java.util.List;
 import us.bojie.appstorebo.ui.bean.FragmentInfo;
 import us.bojie.appstorebo.ui.fragment.CategoryFragment;
 import us.bojie.appstorebo.ui.fragment.GamesFragment;
-import us.bojie.appstorebo.ui.fragment.RankingFragment;
+import us.bojie.appstorebo.ui.fragment.TopListFragment;
 import us.bojie.appstorebo.ui.fragment.RecommendFragment;
 
 /**
@@ -28,7 +28,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private void initFragment() {
         mFragments.add(new FragmentInfo("Recommend", RecommendFragment.class));
-        mFragments.add(new FragmentInfo("Ranking", RankingFragment.class));
+        mFragments.add(new FragmentInfo("Ranking", TopListFragment.class));
         mFragments.add(new FragmentInfo("Games", GamesFragment.class));
         mFragments.add(new FragmentInfo("Category", CategoryFragment.class));
     }

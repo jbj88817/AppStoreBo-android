@@ -1,29 +1,26 @@
 package us.bojie.appstorebo.di.module;
 
-import android.app.ProgressDialog;
-
 import dagger.Module;
 import dagger.Provides;
 import us.bojie.appstorebo.data.AppInfoModel;
 import us.bojie.appstorebo.data.http.ApiService;
 import us.bojie.appstorebo.presenter.contract.AppInfoContract;
-import us.bojie.appstorebo.ui.fragment.RecommendFragment;
 
 /**
  * Created by bojiejiang on 4/23/17.
  */
 
 @Module
-public class RecommendModule {
+public class TopListModule {
 
-    private AppInfoContract.View mView;
+    private AppInfoContract.TopListView mView;
 
-    public RecommendModule(AppInfoContract.View view) {
+    public TopListModule(AppInfoContract.TopListView view) {
         mView = view;
     }
 
     @Provides
-    public AppInfoContract.View provideView() {
+    public AppInfoContract.TopListView provideView() {
         return mView;
     }
 
@@ -32,8 +29,4 @@ public class RecommendModule {
         return new AppInfoModel(apiService);
     }
 
-    @Provides
-    public ProgressDialog provideProgressDialog(AppInfoContract.View view) {
-        return new ProgressDialog(((RecommendFragment) view).getActivity());
-    }
 }
