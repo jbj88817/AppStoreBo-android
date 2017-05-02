@@ -1,12 +1,18 @@
 package us.bojie.appstorebo.ui.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +42,11 @@ public class IndexMutilAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     private LayoutInflater mLayoutInflater;
 
+    private Context mContext;
+
     public IndexMutilAdapter(Context context) {
         mLayoutInflater = LayoutInflater.from(context);
+        mContext = context;
     }
 
     public void setData(IndexBean indexBean) {
@@ -66,6 +75,14 @@ public class IndexMutilAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return new BannerViewHolder(mLayoutInflater.inflate(R.layout.template_banner, parent, false));
         } else if (viewType == TYPE_ICON) {
             return new NavIconViewHolder(mLayoutInflater.inflate(R.layout.template_nav_icon, parent, false));
+        } else if (viewType == TYPE_APPS) {
+            return new AppViewHolder(
+                    mLayoutInflater.inflate(R.layout.template_recyleview_with_title, null, false),
+                    TYPE_APPS);
+        } else if (viewType == TYPE_GAMES) {
+            return new AppViewHolder(
+                    mLayoutInflater.inflate(R.layout.template_recyleview_with_title, null, false),
+                    TYPE_GAMES);
         }
 
         return null;
@@ -75,24 +92,48 @@ public class IndexMutilAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BannerViewHolder) {
             BannerViewHolder bannerViewHolder = (BannerViewHolder) holder;
-            List<Banner> banners = mIndexBean.getBanners();
+            final List<Banner> banners = mIndexBean.getBanners();
             List<String> urls = new ArrayList<>(banners.size());
 
             for (Banner banner : banners) {
                 urls.add(banner.getThumbnail());
             }
             bannerViewHolder.mBanner.setViewUrls(urls);
+            bannerViewHolder.mBanner.setOnBannerItemClickListener(new BannerLayout.OnBannerItemClickListener() {
+                @Override
+                public void onItemClick(int position) {
+//                    banners.get(position)
+                }
+            });
+
         } else if (holder instanceof NavIconViewHolder) {
             NavIconViewHolder navIconViewHolder = (NavIconViewHolder) holder;
             navIconViewHolder.mLayoutHotApp.setOnClickListener(this);
             navIconViewHolder.mLayoutHotGame.setOnClickListener(this);
             navIconViewHolder.mLayoutHotSubject.setOnClickListener(this);
+        } else {
+            AppViewHolder appViewHolder = (AppViewHolder) holder;
+            AppInfoAdapter adapter = new AppInfoAdapter();
+            if (appViewHolder.type == TYPE_APPS) {
+                appViewHolder.mText.setText(R.string.hot_app);
+                adapter.addData(mIndexBean.getRecommendApps());
+            } else {
+                appViewHolder.mText.setText(R.string.hot_game);
+                adapter.addData(mIndexBean.getRecommendGames());
+            }
+            appViewHolder.mRecyclerView.setAdapter(adapter);
+            appViewHolder.mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+                @Override
+                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                }
+            });
         }
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 4;
     }
 
     @Override
@@ -127,6 +168,44 @@ public class IndexMutilAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             ButterKnife.bind(this, itemView);
         }
     }
+
+    class AppViewHolder extends RecyclerView.ViewHolder {
+
+
+        @BindView(R.id.text)
+        TextView mText;
+        @BindView(R.id.recycler_view)
+        RecyclerView mRecyclerView;
+
+
+        int type;
+
+        public AppViewHolder(View itemView, int type) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            this.type = type;
+
+            initRecyclerView();
+        }
+
+        private void initRecyclerView() {
+
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext) {
+
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            });
+
+            DividerItemDecoration itemDecoration = new DividerItemDecoration(mContext,DividerItemDecoration.VERTICAL);
+
+            mRecyclerView.addItemDecoration(itemDecoration);
+
+        }
+    }
+
 
     class ImgLoader implements BannerLayout.ImageLoader {
 
