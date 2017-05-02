@@ -24,6 +24,7 @@ public class AppInfoAdapter extends BaseQuickAdapter<AppInfo, BaseViewHolder> {
     protected void convert(BaseViewHolder helper, AppInfo item) {
         ImageLoader.load(ApiService.BASE_IMG_URL + item.getIcon(), (ImageView) helper.getView(R.id.img_app_icon));
         helper.setText(R.id.txt_app_name, item.getDisplayName())
+                .setText(R.id.txt_category, item.getLevel1CategoryName())
                 .setText(R.id.txt_brief, item.getBriefShow());
 
     }
