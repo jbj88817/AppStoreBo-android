@@ -1,21 +1,34 @@
 package us.bojie.appstorebo.ui.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import us.bojie.appstorebo.di.component.AppComponent;
+import us.bojie.appstorebo.di.component.DaggerAppInfoComponent;
+import us.bojie.appstorebo.di.module.AppInfoModule;
+import us.bojie.appstorebo.presenter.AppInfoPresenter;
+import us.bojie.appstorebo.ui.adapter.AppInfoAdapter;
 
-import us.bojie.appstorebo.R;
+public class GamesFragment extends BaseAppInfoFragment {
 
-public class GamesFragment extends Fragment {
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    AppInfoAdapter buildAdapter() {
+        return AppInfoAdapter.builder()
+                .showPosition(false)
+                .showBrief(true)
+                .showCategoryName(false)
+                .build();
+    }
 
-        View view = inflater.inflate(R.layout.fragment_games, container, false);
-        return view;
+    @Override
+    int type() {
+        return AppInfoPresenter.GAMES;
+    }
+
+    @Override
+    public void setupActivityComponent(AppComponent appComponent) {
+        DaggerAppInfoComponent.builder()
+                .appComponent(appComponent)
+                .appInfoModule(new AppInfoModule(this))
+                .build()
+                .injectGamesFragment(this);
     }
 }

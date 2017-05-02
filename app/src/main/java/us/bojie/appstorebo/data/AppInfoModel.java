@@ -19,10 +19,6 @@ public class AppInfoModel {
         mApiService = apiService;
     }
 
-    public Observable<BaseBean<PageBean<AppInfo>>> getApps() {
-
-        return mApiService.getApps("{\"page\":0}");
-    }
 
     public Observable<BaseBean<IndexBean>> index() {
         return mApiService.index();
@@ -30,5 +26,9 @@ public class AppInfoModel {
 
     public Observable<BaseBean<PageBean<AppInfo>>> toplist(int page) {
         return mApiService.toplist(page);
+    }
+
+    public Observable<BaseBean<PageBean<AppInfo>>> games(int page) {
+        return mApiService.games(page);
     }
 }

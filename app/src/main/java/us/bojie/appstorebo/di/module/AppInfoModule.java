@@ -11,16 +11,16 @@ import us.bojie.appstorebo.presenter.contract.AppInfoContract;
  */
 
 @Module
-public class TopListModule {
+public class AppInfoModule {
 
-    private AppInfoContract.TopListView mView;
+    private AppInfoContract.AppInfoView mView;
 
-    public TopListModule(AppInfoContract.TopListView view) {
+    public AppInfoModule(AppInfoContract.AppInfoView view) {
         mView = view;
     }
 
     @Provides
-    public AppInfoContract.TopListView provideView() {
+    public AppInfoContract.AppInfoView provideView() {
         return mView;
     }
 
@@ -28,5 +28,6 @@ public class TopListModule {
     public AppInfoModel provideModel(ApiService apiService) {
         return new AppInfoModel(apiService);
     }
+
 
 }
