@@ -1,17 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
+    android:id="@+id/activity_login"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="us.bojie.appstorebo.ui.activity.LoginActivity">
+    android:background="#f1f1f1"
+    android:orientation="vertical"
+    tools:context=".ui.activity.LoginActivity">
 
-    <Button
-        android:id="@+id/button"
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.ToolBar">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white"
+        android:orientation="vertical"
+        android:paddingBottom="50dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="20dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/view_mobi_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/txt_mobi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phone_number"
+                android:inputType="number"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/view_password_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <EditText
+                android:id="@+id/txt_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <us.bojie.appstorebo.ui.widget.LoadingButton
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_btn"
+            app:text="Login"
+            app:loadingText="Login"
+            app:progressColor="@color/colorAccent"
+            app:textColor="@color/color_white"/>
+
+
+    </LinearLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="getPermission"
-        tools:layout_editor_absoluteX="63dp"
-        tools:layout_editor_absoluteY="21dp"/>
-</android.support.constraint.ConstraintLayout>
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Sign Up"/>
+
+
+</LinearLayout>

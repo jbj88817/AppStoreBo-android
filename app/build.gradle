@@ -73,4 +73,7 @@ dependencies {
 
     //BaseRecyclerViewAdapterHelper
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.15'
+
+    // RxBinding
+    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 }

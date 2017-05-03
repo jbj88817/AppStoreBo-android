@@ -288,5 +288,6 @@
     <color name="md_yellow_A400">#FFEA00</color>
     <color name="md_yellow_A700">#FFD600</color>
 
+    <color name="gray_btn_bg">#EAEAEA</color>
 
 </resources>

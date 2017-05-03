@@ -33,4 +33,7 @@
     <string name="hot_game">Hot Games</string>
     <string name="hot_top">Top items</string>
     <string name="hot_app">Top apps</string>
+    <string name="phone_number">Cell phone number</string>
+    <string name="password">Password</string>
+    <string name="default_loading">loading</string>
 </resources>
