@@ -76,4 +76,7 @@ dependencies {
 
     // RxBinding
     compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+
+    // RxBus
+    compile 'com.hwangjr.rxbus:rxbus:2.0.0-beta'
 }

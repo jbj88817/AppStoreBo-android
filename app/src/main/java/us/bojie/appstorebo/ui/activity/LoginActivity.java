@@ -3,6 +3,7 @@ package us.bojie.appstorebo.ui.activity;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -12,10 +13,15 @@ import io.reactivex.Observable;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.bean.LoginBean;
 import us.bojie.appstorebo.di.component.AppComponent;
+import us.bojie.appstorebo.di.component.DaggerLoginComponent;
+import us.bojie.appstorebo.di.module.LoginModule;
+import us.bojie.appstorebo.presenter.LoginPresenter;
+import us.bojie.appstorebo.presenter.contract.LoginContract;
 import us.bojie.appstorebo.ui.widget.LoadingButton;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity<LoginPresenter> implements LoginContract.LoginView {
 
 
     @BindView(R.id.tool_bar)
@@ -38,7 +44,11 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-
+        DaggerLoginComponent.builder()
+                .appComponent(appComponent)
+                .loginModule(new LoginModule(this))
+                .build()
+                .inject(this);
     }
 
     @Override
@@ -66,17 +76,11 @@ public class LoginActivity extends BaseActivity {
         RxView.clicks(mBtnLogin).subscribe(new Consumer<Object>() {
             @Override
             public void accept(Object o) throws Exception {
-                if (!mTxtMobi.toString().trim().equals("13800138000")) {
-                    mViewMobiWrapper.setError("Wrong number");
-                } else {
-                    mViewMobiWrapper.setError("");
-                    mViewMobiWrapper.setErrorEnabled(false);
-                }
+                mPresenter.login(mTxtMobi.getText().toString().trim(),
+                        mTxtPassword.getText().toString().trim());
             }
         });
     }
-
-
 
     private boolean isPhoneValid(String phone) {
         return phone.length() == 11;
@@ -84,5 +88,35 @@ public class LoginActivity extends BaseActivity {
 
     private boolean isPasswordValid(String password) {
         return password.length() >= 6;
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void dismissLoading() {
+
+    }
+
+    @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
+    public void checkPhoneError() {
+        mViewMobiWrapper.setError("Phone format is wrong");
+    }
+
+    @Override
+    public void checkPhoneSuccess() {
+        mViewMobiWrapper.setError("");
+    }
+
+    @Override
+    public void loginSuccess(LoginBean bean) {
+        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
     }
 }

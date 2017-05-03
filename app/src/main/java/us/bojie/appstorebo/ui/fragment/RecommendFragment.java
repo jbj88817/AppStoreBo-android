@@ -1,18 +1,14 @@
 package us.bojie.appstorebo.ui.fragment;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.tbruyelle.rxpermissions2.RxPermissions;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import io.reactivex.functions.Consumer;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.di.component.AppComponent;
@@ -51,7 +47,7 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
     @Override
     public void init() {
         initRecycleView();
-        getPermission();
+        mPresenter.requestData();
     }
 
 
@@ -94,18 +90,5 @@ public class RecommendFragment extends ProgressFragment<RecommendPresenter> impl
         Toast.makeText(getActivity(), "Permission Denied!", Toast.LENGTH_SHORT).show();
     }
 
-    public void getPermission() {
-        RxPermissions rxPermissions = new RxPermissions(getActivity());
-        rxPermissions.request(Manifest.permission.READ_PHONE_STATE)
-                .subscribe(new Consumer<Boolean>() {
-                    @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if (aBoolean) {
-                            Toast.makeText(getActivity(), "got permission", Toast.LENGTH_SHORT).show();
-                            mPresenter.requestData();
-                        }
-                    }
-                });
 
-    }
 }

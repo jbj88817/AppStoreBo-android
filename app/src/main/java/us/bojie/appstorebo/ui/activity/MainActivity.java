@@ -1,5 +1,6 @@
 package us.bojie.appstorebo.ui.activity;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,8 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.hwangjr.rxbus.RxBus;
+import com.hwangjr.rxbus.annotation.Subscribe;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+
 import butterknife.BindView;
+import io.reactivex.functions.Consumer;
 import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.bean.User;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.ui.adapter.ViewPagerAdapter;
 
@@ -50,8 +57,22 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void init() {
-        initDrawerLayout();
-        initTabLayout();
+
+        RxBus.get().register(this);
+
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions.request(Manifest.permission.READ_PHONE_STATE)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            initDrawerLayout();
+                            initTabLayout();
+                        }
+                    }
+                });
+
+
     }
 
     private void initDrawerLayout() {
@@ -97,5 +118,16 @@ public class MainActivity extends BaseActivity {
         PagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Subscribe
+    public void getUser(User user) {
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.get().unregister(this);
     }
 }

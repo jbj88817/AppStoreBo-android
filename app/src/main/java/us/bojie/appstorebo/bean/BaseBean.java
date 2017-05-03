@@ -1,12 +1,10 @@
 package us.bojie.appstorebo.bean;
 
-import java.io.Serializable;
-
 /**
  * Created by bojiejiang on 4/25/17.
  */
 
-public class BaseBean<T> implements Serializable {
+public class BaseBean<T> extends BaseEntity {
     private int status;
     private String message;
     private T data;
