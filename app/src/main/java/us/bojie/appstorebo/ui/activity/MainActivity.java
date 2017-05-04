@@ -15,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -26,7 +28,10 @@ import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.User;
+import us.bojie.appstorebo.common.Constant;
 import us.bojie.appstorebo.common.font.BojieFont;
+import us.bojie.appstorebo.common.imageloader.GlideCircleTransform;
+import us.bojie.appstorebo.common.util.ACache;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.ui.adapter.ViewPagerAdapter;
 
@@ -75,6 +80,7 @@ public class MainActivity extends BaseActivity {
                         if (aBoolean) {
                             initDrawerLayout();
                             initTabLayout();
+                            initUser();
                         }
                     }
                 });
@@ -86,13 +92,6 @@ public class MainActivity extends BaseActivity {
         mUserHeadView.setImageDrawable(new IconicsDrawable(this, BojieFont.Icon.head).colorRes(R.color.white));
 
         mTextUserName = (TextView) headerView.findViewById(R.id.txt_username);
-
-        headerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
-        });
 
         mNavigationView.getMenu().findItem(R.id.menu_app_update).setIcon(new IconicsDrawable(this, Ionicons.Icon.ion_ios_loop));
         mNavigationView.getMenu().findItem(R.id.menu_download_manager).setIcon(new IconicsDrawable(this, BojieFont.Icon.download));
@@ -108,7 +107,7 @@ public class MainActivity extends BaseActivity {
                 switch (item.getItemId()) {
 
                     case R.id.menu_logout:
-//                        logout();
+                        logout();
                         break;
 
                 }
@@ -127,6 +126,25 @@ public class MainActivity extends BaseActivity {
         mDrawerLayout.addDrawerListener(drawerToggle);
     }
 
+    private void logout() {
+        ACache aCache = ACache.get(this);
+
+        aCache.put(Constant.TOKEN, "");
+        aCache.put(Constant.USER, "");
+
+        mUserHeadView.setImageDrawable(new IconicsDrawable(this, BojieFont.Icon.head).colorRes(R.color.white));
+        mTextUserName.setText(R.string.sign_in);
+
+        Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
+
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
+    }
+
     private void initTabLayout() {
 
         PagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -136,7 +154,30 @@ public class MainActivity extends BaseActivity {
 
     @Subscribe
     public void getUser(User user) {
+        initUserHeadView(user);
+    }
 
+    private void initUser() {
+        Object objUser = ACache.get(this).getAsObject(Constant.USER);
+        if (objUser == null) {
+            headerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            });
+        } else {
+            User user = (User) objUser;
+            initUserHeadView(user);
+
+        }
+    }
+
+    private void initUserHeadView(User user) {
+        Glide.with(this).load(user.getLogo_url())
+                .transform(new GlideCircleTransform(this))
+                .into(mUserHeadView);
+        mTextUserName.setText(user.getUsername());
     }
 
     @Override
