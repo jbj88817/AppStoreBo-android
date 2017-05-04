@@ -25,6 +25,7 @@
     <string name="error_account_freeze">Account freezed, please contact admin</string>
     <string name="error_api_no_permission">No permission</string>
     <string name="error_login">Username or Password Error</string>
+    <string name="error_token">Please re-login.</string>
     <string name="error_http_400">Bad request</string>
     <string name="error_http_404">Not found</string>
     <string name="error_http_500">Internal server error</string>

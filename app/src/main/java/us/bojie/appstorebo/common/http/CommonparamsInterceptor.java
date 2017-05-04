@@ -19,6 +19,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
 import us.bojie.appstorebo.common.Constant;
+import us.bojie.appstorebo.common.util.ACache;
 import us.bojie.appstorebo.common.util.DensityUtil;
 import us.bojie.appstorebo.common.util.DeviceUtils;
 
@@ -56,6 +57,9 @@ public class CommonparamsInterceptor implements Interceptor {
             commonParamsMap.put(Constant.RESOLUTION, DensityUtil.getScreenW(mContext) + "*" + DensityUtil.getScreenH(mContext));
             commonParamsMap.put(Constant.SDK, DeviceUtils.getBuildVersionSDK() + "");
             commonParamsMap.put(Constant.DENSITY_SCALE_FACTOR, mContext.getResources().getDisplayMetrics().density + "");
+
+            String token = ACache.get(mContext).getAsString(Constant.TOKEN);
+            commonParamsMap.put(Constant.TOKEN, token == null ? "" : token);
 
             if (method.equals("GET")) {
                 HttpUrl httpUrl = request.url();
