@@ -1,6 +1,7 @@
 package us.bojie.appstorebo.ui.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,16 +13,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hwangjr.rxbus.RxBus;
 import com.hwangjr.rxbus.annotation.Subscribe;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.User;
+import us.bojie.appstorebo.common.font.BojieFont;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.ui.adapter.ViewPagerAdapter;
 
@@ -39,6 +44,8 @@ public class MainActivity extends BaseActivity {
     ViewPager mViewPager;
 
     private View headerView;
+    private ImageView mUserHeadView;
+    private TextView mTextUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,37 +78,44 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 });
-
-
     }
 
     private void initDrawerLayout() {
         headerView = mNavigationView.getHeaderView(0);
+        mUserHeadView = (ImageView) headerView.findViewById(R.id.img_avatar);
+        mUserHeadView.setImageDrawable(new IconicsDrawable(this, BojieFont.Icon.head).colorRes(R.color.white));
+
+        mTextUserName = (TextView) headerView.findViewById(R.id.txt_username);
+
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "headerview clicked", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
+
+        mNavigationView.getMenu().findItem(R.id.menu_app_update).setIcon(new IconicsDrawable(this, Ionicons.Icon.ion_ios_loop));
+        mNavigationView.getMenu().findItem(R.id.menu_download_manager).setIcon(new IconicsDrawable(this, BojieFont.Icon.download));
+        mNavigationView.getMenu().findItem(R.id.menu_app_uninstall).setIcon(new IconicsDrawable(this, Ionicons.Icon.ion_ios_trash_outline));
+        mNavigationView.getMenu().findItem(R.id.menu_setting).setIcon(new IconicsDrawable(this, Ionicons.Icon.ion_ios_gear_outline));
+
+        mNavigationView.getMenu().findItem(R.id.menu_logout).setIcon(new IconicsDrawable(this, BojieFont.Icon.shutdown));
+
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.menu_app_update:
-                        Toast.makeText(MainActivity.this, "clicked app update", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.menu_message:
-                        Toast.makeText(MainActivity.this, "clicked message", Toast.LENGTH_SHORT).show();
-                        break;
-                    case R.id.menu_setting:
-                        Toast.makeText(MainActivity.this, "clicked setting", Toast.LENGTH_SHORT).show();
-                        break;
-                }
 
+                    case R.id.menu_logout:
+//                        logout();
+                        break;
+
+                }
                 return false;
             }
         });
+
 
         mToolBar.inflateMenu(R.menu.toolbar_menu);
 

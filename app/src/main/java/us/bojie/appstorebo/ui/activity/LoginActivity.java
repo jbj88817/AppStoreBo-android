@@ -57,6 +57,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     private void initView() {
+
         Observable<CharSequence> mobileObservable = RxTextView.textChanges(mTxtMobi);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mTxtPassword);
 
