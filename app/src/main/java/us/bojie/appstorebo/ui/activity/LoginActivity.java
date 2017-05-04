@@ -3,6 +3,7 @@ package us.bojie.appstorebo.ui.activity;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
@@ -92,17 +93,17 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void showLoading() {
-
+        mBtnLogin.showLoading();
     }
 
     @Override
     public void dismissLoading() {
-
+        mBtnLogin.showButtonText();
     }
 
     @Override
     public void showError(String msg) {
-
+        mBtnLogin.showButtonText();
     }
 
     @Override
@@ -117,6 +118,7 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
 
     @Override
     public void loginSuccess(LoginBean bean) {
+        Toast.makeText(this, "Login success!", Toast.LENGTH_SHORT).show();
         finish();
     }
 }

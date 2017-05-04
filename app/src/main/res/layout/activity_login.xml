@@ -70,7 +70,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/bg_btn"
             app:text="Login"
-            app:loadingText="Login"
+            app:loadingText="Please wait..."
             app:progressColor="@color/colorAccent"
             app:textColor="@color/color_white"/>
 

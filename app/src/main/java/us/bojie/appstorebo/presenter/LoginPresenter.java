@@ -35,7 +35,7 @@ public class LoginPresenter extends BasePresenter<LoginContract.ILoginModel, Log
                 .subscribe(new ErrorHandlerSubscriber<LoginBean>(mContext) {
                     @Override
                     public void onSubscribe(Disposable d) {
-
+                        mView.showLoading();
                     }
 
                     @Override
@@ -48,7 +48,13 @@ public class LoginPresenter extends BasePresenter<LoginContract.ILoginModel, Log
 
                     @Override
                     public void onComplete() {
+//                        mView.dismissLoading();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        mView.dismissLoading();
                     }
                 });
     }
