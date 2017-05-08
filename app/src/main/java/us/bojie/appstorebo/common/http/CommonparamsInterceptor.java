@@ -1,6 +1,7 @@
 package us.bojie.appstorebo.common.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -107,11 +108,17 @@ public class CommonparamsInterceptor implements Interceptor {
                     Buffer buffer = new Buffer();
                     body.writeTo(buffer);
                     String oldJsonParams = buffer.readUtf8();
-                    rootMap = mGson.fromJson(oldJsonParams, HashMap.class); // origin params
-                    rootMap.put("publicParams", commonParamsMap);
-                    String newJsonParams = mGson.toJson(rootMap);
 
-                    request = request.newBuilder().post(RequestBody.create(JSON, newJsonParams)).build();
+                    if (TextUtils.isEmpty(oldJsonParams)) {
+                        rootMap = mGson.fromJson(oldJsonParams, HashMap.class); // origin params
+                        if (rootMap != null) {
+                            rootMap.put("publicParams", commonParamsMap);
+                            String newJsonParams = mGson.toJson(rootMap);
+                            request = request.newBuilder().post(RequestBody.create(JSON, newJsonParams)).build();
+                        }
+
+                    }
+
                 }
             }
 

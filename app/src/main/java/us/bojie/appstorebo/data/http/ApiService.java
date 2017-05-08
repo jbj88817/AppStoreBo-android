@@ -1,5 +1,7 @@
 package us.bojie.appstorebo.data.http;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -7,6 +9,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.BaseBean;
+import us.bojie.appstorebo.bean.Category;
 import us.bojie.appstorebo.bean.IndexBean;
 import us.bojie.appstorebo.bean.LoginBean;
 import us.bojie.appstorebo.bean.PageBean;
@@ -39,4 +42,6 @@ public interface ApiService {
     @POST("login")
     Observable<BaseBean<LoginBean>> login(@Body LoginRequestBean param);
 
+    @GET("category")
+    Observable<BaseBean<List<Category>>> getCategories();
 }

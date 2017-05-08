@@ -1,9 +1,27 @@
 package us.bojie.appstorebo.ui.fragment;
 
-import us.bojie.appstorebo.R;
-import us.bojie.appstorebo.di.component.AppComponent;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-public class CategoryFragment extends ProgressFragment {
+import java.util.List;
+
+import butterknife.BindView;
+import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.bean.Category;
+import us.bojie.appstorebo.di.component.AppComponent;
+import us.bojie.appstorebo.di.component.DaggerCategoryComponent;
+import us.bojie.appstorebo.di.module.CategoryModule;
+import us.bojie.appstorebo.presenter.CateogoryPresenter;
+import us.bojie.appstorebo.presenter.contract.CategoryContract;
+import us.bojie.appstorebo.ui.adapter.CategoryAdapter;
+
+public class CategoryFragment extends ProgressFragment<CateogoryPresenter> implements CategoryContract.CategoryView {
+
+    @BindView(R.id.recycle_view)
+    RecyclerView mRecycleView;
+
+    private CategoryAdapter mAdapter;
 
     @Override
     public int setLayout() {
@@ -12,11 +30,30 @@ public class CategoryFragment extends ProgressFragment {
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-
+        DaggerCategoryComponent.builder()
+                .appComponent(appComponent)
+                .categoryModule(new CategoryModule(this))
+                .build()
+                .inject(this);
     }
 
     @Override
     public void init() {
+        initRecyclerView();
+        mPresenter.getAllCategory();
+    }
 
+    private void initRecyclerView() {
+        mRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        mRecycleView.addItemDecoration(itemDecoration);
+
+        mAdapter = new CategoryAdapter();
+        mRecycleView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void showData(List<Category> categories) {
+        mAdapter.addData(categories);
     }
 }
