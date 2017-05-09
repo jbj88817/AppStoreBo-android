@@ -109,7 +109,7 @@ public class CommonparamsInterceptor implements Interceptor {
                     body.writeTo(buffer);
                     String oldJsonParams = buffer.readUtf8();
 
-                    if (TextUtils.isEmpty(oldJsonParams)) {
+                    if (!TextUtils.isEmpty(oldJsonParams)) {
                         rootMap = mGson.fromJson(oldJsonParams, HashMap.class); // origin params
                         if (rootMap != null) {
                             rootMap.put("publicParams", commonParamsMap);

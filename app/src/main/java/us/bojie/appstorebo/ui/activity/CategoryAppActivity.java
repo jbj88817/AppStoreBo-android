@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
@@ -51,6 +52,13 @@ public class CategoryAppActivity extends BaseActivity {
                         .sizeDp(16)
                         .color(getResources().getColor(R.color.md_white_1000))
         );
+
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CategoryAppActivity.this, MainActivity.class));
+            }
+        });
 
         CategoryAppViewPageAdapter adapter = new CategoryAppViewPageAdapter(getSupportFragmentManager(), mCategory.getId());
         mViewPager.setOffscreenPageLimit(adapter.getCount());
