@@ -1,7 +1,9 @@
 package us.bojie.appstorebo.ui.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -66,6 +68,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
                 .sizeDp(16)
                 .color(getResources().getColor(R.color.md_white_1000))
         );
+
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
 
         Observable<CharSequence> mobileObservable = RxTextView.textChanges(mTxtMobi);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mTxtPassword);

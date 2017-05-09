@@ -3,6 +3,7 @@ package us.bojie.appstorebo.di.component;
 import dagger.Component;
 import us.bojie.appstorebo.di.module.AppInfoModule;
 import us.bojie.appstorebo.di.scope.FragmentScope;
+import us.bojie.appstorebo.ui.fragment.CategoryAppFragment;
 import us.bojie.appstorebo.ui.fragment.GamesFragment;
 import us.bojie.appstorebo.ui.fragment.TopListFragment;
 
@@ -15,4 +16,5 @@ import us.bojie.appstorebo.ui.fragment.TopListFragment;
 public interface AppInfoComponent {
     void injectTopListFragment(TopListFragment fragment);
     void injectGamesFragment(GamesFragment fragment);
+    void injectCategoryAppFragment(CategoryAppFragment fragment);
 }

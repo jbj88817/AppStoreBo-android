@@ -6,6 +6,7 @@ import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.BaseBean;
@@ -44,4 +45,14 @@ public interface ApiService {
 
     @GET("category")
     Observable<BaseBean<List<Category>>> getCategories();
+
+    @GET("category/featured/{categoryid}")
+    Observable<BaseBean<PageBean<AppInfo>>> getFeaturedAppsByCategory(@Path("categoryid") int categoryid, @Query("page") int page);
+
+    @GET("category/toplist/{categoryid}")
+    Observable<BaseBean<PageBean<AppInfo>>> getTopListAppsByCategory(@Path("categoryid") int categoryid, @Query("page") int page);
+
+    @GET("category/newlist/{categoryid}")
+    Observable<BaseBean<PageBean<AppInfo>>> getNewListAppsByCategory(@Path("categoryid") int categoryid, @Query("page") int page);
+
 }

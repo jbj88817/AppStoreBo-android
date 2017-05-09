@@ -1,6 +1,8 @@
 package us.bojie.appstorebo.ui.fragment;
 
 import us.bojie.appstorebo.di.component.AppComponent;
+import us.bojie.appstorebo.di.component.DaggerAppInfoComponent;
+import us.bojie.appstorebo.di.module.AppInfoModule;
 import us.bojie.appstorebo.ui.adapter.AppInfoAdapter;
 
 /**
@@ -9,9 +11,6 @@ import us.bojie.appstorebo.ui.adapter.AppInfoAdapter;
 
 public class CategoryAppFragment extends BaseAppInfoFragment {
 
-    public static final int FEATURED = 0;
-    public static final int TOPLIST = 1;
-    public static final int NEWLIST = 2;
 
     private int categoryId;
     private int fragmentType;
@@ -27,21 +26,30 @@ public class CategoryAppFragment extends BaseAppInfoFragment {
 
     @Override
     AppInfoAdapter buildAdapter() {
-        return null;
+        return AppInfoAdapter.builder()
+                .showPosition(false)
+                .showBrief(true)
+                .showCategoryName(false)
+                .build();
     }
 
     @Override
     int type() {
-        return 0;
+        return 3;
     }
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-
+        DaggerAppInfoComponent.builder()
+                .appComponent(appComponent)
+                .appInfoModule(new AppInfoModule(this))
+                .build()
+                .injectCategoryAppFragment(this);
     }
 
     @Override
     public void init() {
-//        initRecyclerView();
+        mPresenter.requestWithCategory(page, categoryId, fragmentType);
+        initRecyclerView();
     }
 }

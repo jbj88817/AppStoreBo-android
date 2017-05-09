@@ -22,14 +22,18 @@ public class AppInfoPresenter extends BasePresenter<AppInfoModel, AppInfoContrac
 
     public static final int TOP_LIST = 1;
     public static final int GAMES = 2;
+    public static final int CATEGORY = 3;
+
+    public static final int FEATURED = 0;
+    public static final int TOPLIST = 1;
+    public static final int NEWLIST = 2;
 
     @Inject
     public AppInfoPresenter(AppInfoModel model, AppInfoContract.AppInfoView view) {
         super(model, view);
     }
 
-    public void requestData(int type,int page) {
-
+    private void request(int type, int page, int categoryId, int fragmentType) {
         Observer observer = null;
 
         if (page == 0) {
@@ -60,18 +64,35 @@ public class AppInfoPresenter extends BasePresenter<AppInfoModel, AppInfoContrac
             };
         }
 
-        Observable observable = getObservable(type, page);
+        Observable observable = getObservable(type, page, categoryId, fragmentType);
         observable
                 .compose(RxHttpReponseCompat.<PageBean<AppInfo>>compatResult())
                 .subscribe(observer);
     }
 
-    private Observable<BaseBean<PageBean<AppInfo>>> getObservable(int type, int page) {
+    public void requestData(int type, int page) {
+        request(type, page, 0, 0);
+    }
+
+    public void requestWithCategory(int page, int categoryId, int fragmentType) {
+        request(AppInfoPresenter.CATEGORY, page, categoryId, fragmentType);
+    }
+
+    private Observable<BaseBean<PageBean<AppInfo>>> getObservable(int type, int page, int categoryId, int fragmentType) {
         switch (type) {
             case TOP_LIST:
                 return mModel.toplist(page);
             case GAMES:
                 return mModel.games(page);
+            case CATEGORY:
+                if (fragmentType == FEATURED) {
+                    return mModel.getFeaturedAppsByCategory(categoryId, page);
+                } else if (fragmentType == TOPLIST) {
+                    return mModel.getTopListAppsByCategory(categoryId, page);
+                } else if (fragmentType == NEWLIST) {
+                    return mModel.getNewListAppsByCategory(categoryId, page);
+                }
+
             default:
                 return Observable.empty();
         }
