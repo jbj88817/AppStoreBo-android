@@ -290,5 +290,5 @@
 
     <color name="gray_btn_bg">#EAEAEA</color>
     <color name="white">#fff</color>
-
+    <color name="background">#F1F1F1</color>
 </resources>

@@ -7,6 +7,8 @@ import android.widget.Toast;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
 
 import butterknife.BindView;
 import io.reactivex.Observable;
@@ -57,6 +59,13 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements Login
     }
 
     private void initView() {
+
+        mToolBar.setNavigationIcon(
+                new IconicsDrawable(this)
+                .icon(Ionicons.Icon.ion_ios_arrow_back)
+                .sizeDp(16)
+                .color(getResources().getColor(R.color.md_white_1000))
+        );
 
         Observable<CharSequence> mobileObservable = RxTextView.textChanges(mTxtMobi);
         Observable<CharSequence> passwordObservable = RxTextView.textChanges(mTxtPassword);
