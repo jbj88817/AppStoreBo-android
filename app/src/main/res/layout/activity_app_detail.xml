@@ -8,8 +8,8 @@
     android:background="#60000000"
     tools:context="us.bojie.appstorebo.ui.activity.AppDetailActivity">
 
-    <ImageView
-        android:id="@+id/imgView"
+    <FrameLayout
+        android:id="@+id/view_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
