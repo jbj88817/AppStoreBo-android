@@ -23,7 +23,7 @@ import us.bojie.appstorebo.presenter.BasePresenter;
 public abstract class BaseActivity<T extends BasePresenter> extends AppCompatActivity {
 
     private Unbinder mUnbinder;
-    private AppApplication mApplication;
+    protected AppApplication mApplication;
 
     @Inject
     T mPresenter;

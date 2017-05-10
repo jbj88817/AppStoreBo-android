@@ -1,10 +1,13 @@
 package us.bojie.appstorebo.ui.fragment;
 
+import android.content.Intent;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 
 import butterknife.BindView;
 import us.bojie.appstorebo.R;
@@ -12,6 +15,7 @@ import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.PageBean;
 import us.bojie.appstorebo.presenter.AppInfoPresenter;
 import us.bojie.appstorebo.presenter.contract.AppInfoContract;
+import us.bojie.appstorebo.ui.activity.AppDetailActivity;
 import us.bojie.appstorebo.ui.adapter.AppInfoAdapter;
 
 /**
@@ -49,6 +53,14 @@ public abstract class BaseAppInfoFragment extends ProgressFragment<AppInfoPresen
         mAdapter = buildAdapter();
         mAdapter.setOnLoadMoreListener(this, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mApplication.setView(view);
+                startActivity(new Intent(getActivity(), AppDetailActivity.class));
+            }
+        });
     }
 
     @Override

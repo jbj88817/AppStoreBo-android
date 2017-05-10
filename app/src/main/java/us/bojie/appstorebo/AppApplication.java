@@ -2,6 +2,7 @@ package us.bojie.appstorebo;
 
 import android.app.Application;
 import android.content.Context;
+import android.view.View;
 
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.di.component.DaggerAppComponent;
@@ -15,6 +16,7 @@ import us.bojie.appstorebo.di.module.HttpModule;
 public class AppApplication extends Application {
 
     private AppComponent mAppComponent;
+    private View mView;
 
     public static AppApplication getApplication(Context context) {
         return (AppApplication) context.getApplicationContext();
@@ -33,5 +35,13 @@ public class AppApplication extends Application {
                 .appModule(new AppModule(this))
                 .httpModule(new HttpModule())
                 .build();
+    }
+
+    public View getView() {
+        return mView;
+    }
+
+    public void setView(View view) {
+        mView = view;
     }
 }
