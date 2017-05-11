@@ -9,17 +9,18 @@ import us.bojie.appstorebo.presenter.contract.AppInfoContract;
  */
 
 @Module(includes = AppModelModule.class)
-public class AppInfoModule {
+public class AppDetailModule {
 
-    private AppInfoContract.AppInfoView mView;
+    private AppInfoContract.AppDetailView mView;
 
-    public AppInfoModule(AppInfoContract.AppInfoView view) {
+    public AppDetailModule(AppInfoContract.AppDetailView view) {
         mView = view;
     }
 
     @Provides
-    public AppInfoContract.AppInfoView provideView() {
+    public AppInfoContract.AppDetailView provideView() {
         return mView;
     }
+
 
 }

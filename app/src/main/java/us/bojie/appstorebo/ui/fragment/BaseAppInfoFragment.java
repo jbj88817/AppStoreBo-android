@@ -31,6 +31,8 @@ public abstract class BaseAppInfoFragment extends ProgressFragment<AppInfoPresen
     protected AppInfoAdapter mAdapter;
     int page = 0;
 
+    public static final String APPINFO = "appinfo";
+
     @Override
     public int setLayout() {
         return R.layout.template_recycler_view;
@@ -57,8 +59,12 @@ public abstract class BaseAppInfoFragment extends ProgressFragment<AppInfoPresen
         mRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                AppInfo appInfo = mAdapter.getItem(position);
                 mApplication.setView(view);
-                startActivity(new Intent(getActivity(), AppDetailActivity.class));
+                Intent intent = new Intent(getActivity(), AppDetailActivity.class);
+                intent.putExtra(APPINFO, appInfo);
+                startActivity(intent);
             }
         });
     }

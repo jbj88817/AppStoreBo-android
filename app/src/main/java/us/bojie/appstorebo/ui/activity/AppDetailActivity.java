@@ -5,23 +5,29 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import us.bojie.appstorebo.R;
+import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.common.util.DensityUtil;
 import us.bojie.appstorebo.di.component.AppComponent;
+import us.bojie.appstorebo.presenter.AppDetailPresenter;
+import us.bojie.appstorebo.ui.fragment.AppDetailFragment;
+import us.bojie.appstorebo.ui.fragment.BaseAppInfoFragment;
 
-public class AppDetailActivity extends BaseActivity {
+public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
 
 
     @BindView(R.id.view_content)
     FrameLayout mViewContent;
+
+    private AppInfo mAppInfo;
 
     @Override
     public int setLayout() {
@@ -30,11 +36,21 @@ public class AppDetailActivity extends BaseActivity {
 
     @Override
     public void setupActivityComponent(AppComponent appComponent) {
-
     }
 
     @Override
     public void init() {
+
+        mAppInfo = (AppInfo) getIntent().getSerializableExtra(BaseAppInfoFragment.APPINFO);
+
+//        popupView();
+
+//        extension();
+
+        initFragment();
+    }
+
+    private void popupView() {
         View view = mApplication.getView();
         Bitmap bitmap = getViewImageCache(view);
 
@@ -58,8 +74,6 @@ public class AppDetailActivity extends BaseActivity {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(marginLayoutParams);
 
         mViewContent.setLayoutParams(params);
-
-        extension();
     }
 
     private void extension() {
@@ -70,7 +84,7 @@ public class AppDetailActivity extends BaseActivity {
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                initFragment();
             }
 
             @Override
@@ -98,10 +112,11 @@ public class AppDetailActivity extends BaseActivity {
         return bitmap;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    private void initFragment() {
+        AppDetailFragment fragment = new AppDetailFragment(mAppInfo.getId());
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.view_content, fragment);
+        transaction.commitAllowingStateLoss();
     }
 }

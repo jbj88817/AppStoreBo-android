@@ -22,4 +22,8 @@ public interface AppInfoContract {
         void showResult(PageBean<AppInfo> appInfoPageBean);
         void onLoadMoreCompleted();
     }
+
+    interface AppDetailView extends BaseView {
+        void showAppDetail(AppInfo appInfo);
+    }
 }
