@@ -5,17 +5,23 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
+import us.bojie.appstorebo.common.imageloader.ImageLoader;
 import us.bojie.appstorebo.common.util.DensityUtil;
+import us.bojie.appstorebo.data.http.ApiService;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.presenter.AppDetailPresenter;
 import us.bojie.appstorebo.ui.fragment.AppDetailFragment;
@@ -26,6 +32,10 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
 
     @BindView(R.id.view_content)
     FrameLayout mViewContent;
+    @BindView(R.id.img_icon)
+    ImageView mImgIcon;
+    @BindView(R.id.txt_name)
+    TextView mTxtName;
 
     private AppInfo mAppInfo;
 
@@ -42,6 +52,9 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
     public void init() {
 
         mAppInfo = (AppInfo) getIntent().getSerializableExtra(BaseAppInfoFragment.APPINFO);
+
+        ImageLoader.load(ApiService.BASE_IMG_URL + mAppInfo.getIcon(), mImgIcon);
+        mTxtName.setText(mAppInfo.getDisplayName());
 
 //        popupView();
 
@@ -118,5 +131,12 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.add(R.id.view_content, fragment);
         transaction.commitAllowingStateLoss();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }
