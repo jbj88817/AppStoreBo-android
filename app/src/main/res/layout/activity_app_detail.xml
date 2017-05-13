@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
                 android:id="@+id/img_icon"
@@ -31,16 +31,6 @@
                 android:layout_marginTop="10dp"
                 android:src="@mipmap/ic_launcher"
                 app:layout_collapseMode="parallax"/>
-
-            <TextView
-                android:id="@+id/txt_name"
-                style="@style/Text_Title_Large"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
-                android:layout_marginTop="130dp"
-                android:text="@string/app_name"
-                android:textColor="@color/white"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -65,4 +55,22 @@
             android:layout_height="wrap_content"/>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/txt_name"
+        style="@style/Text_Title_Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="130dp"
+        android:elevation="5dp"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        app:dependTargetY="-100dp"
+        app:dependType="y"
+        app:dependsOn="@+id/app_bar"
+        app:layout_behavior="com.zoonref.SimpleViewBehavior"
+        app:targetX="48dp"
+        app:targetY="12dp"/>
+
 </android.support.design.widget.CoordinatorLayout>

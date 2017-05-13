@@ -82,4 +82,7 @@ dependencies {
 
     // ExpandableTextView
     compile 'com.ms-square:expandableTextView:0.1.4'
+
+    //View behavior
+    compile 'com.zoonref:simple-view-behavior:1.0'
 }

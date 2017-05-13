@@ -3,11 +3,12 @@ package us.bojie.appstorebo.ui.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.common.imageloader.ImageLoader;
@@ -36,6 +39,8 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
     ImageView mImgIcon;
     @BindView(R.id.txt_name)
     TextView mTxtName;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     private AppInfo mAppInfo;
 
@@ -52,6 +57,20 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
     public void init() {
 
         mAppInfo = (AppInfo) getIntent().getSerializableExtra(BaseAppInfoFragment.APPINFO);
+
+        mToolbar.setNavigationIcon(
+                new IconicsDrawable(this)
+                        .icon(Ionicons.Icon.ion_ios_arrow_back)
+                        .sizeDp(16)
+                        .color(getResources().getColor(R.color.md_white_1000))
+        );
+
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(AppDetailActivity.this, MainActivity.class));
+            }
+        });
 
         ImageLoader.load(ApiService.BASE_IMG_URL + mAppInfo.getIcon(), mImgIcon);
         mTxtName.setText(mAppInfo.getDisplayName());
@@ -133,10 +152,4 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         transaction.commitAllowingStateLoss();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
