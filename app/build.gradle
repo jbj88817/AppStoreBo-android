@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
     defaultConfig {
         applicationId "us.bojie.appstorebo"
-        minSdkVersion 16
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,36 +27,38 @@ dependencies {
     })
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
+
+    compile rootProject.ext.dependencies["appcompat-v7"]
+    compile rootProject.ext.dependencies["design"]
+
+    // ButterKnife
+    compile rootProject.ext.dependencies['butterknife']
+    annotationProcessor rootProject.ext.dependencies['butterknife-compiler']
+
+    // Retrofit
+    compile rootProject.ext.dependencies['retrofit']
+    compile rootProject.ext.dependencies['retrofit-adapter-rxjava']
+    compile rootProject.ext.dependencies['retrofit-converter-gson']
+
+    // OkHttp3
+    compile rootProject.ext.dependencies["okhttp"]
+    compile rootProject.ext.dependencies["okhttp-logging-interceptor"]
+
+    // Rx2
+    compile rootProject.ext.dependencies["rxjava"]
+    compile rootProject.ext.dependencies["rxandroid"]
+    compile rootProject.ext.dependencies["rxbinding"]
+
+    // Dagger2
+    compile rootProject.ext.dependencies["dagger"]
+    annotationProcessor rootProject.ext.dependencies["dagger-compiler"]
 
     // icons
     compile 'com.mikepenz:iconics-core:2.8.3@aar'
     compile 'com.mikepenz:ionicons-typeface:2.0.1.2@aar'
 
-    // ButterKnife
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-
-    // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
-
     // Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
-
-    // Rx2
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
-
-    // OkHttp3
-    compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
-
-    // Dagger2
-    compile 'com.google.dagger:dagger:2.10'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
 
     // PathView
     compile 'com.eftimoff:android-pathview:1.0.8@aar'
@@ -73,9 +75,6 @@ dependencies {
 
     //BaseRecyclerViewAdapterHelper
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.15'
-
-    // RxBinding
-    compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
 
     // RxBus
     compile 'com.hwangjr.rxbus:rxbus:2.0.0-beta'
