@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -41,6 +42,11 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
     TextView mTxtName;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.view_temp)
+    View mViewTemp;
+    @BindView(R.id.view_coordinator)
+    CoordinatorLayout mCoordinator;
+
 
     private AppInfo mAppInfo;
 
@@ -75,11 +81,11 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         ImageLoader.load(ApiService.BASE_IMG_URL + mAppInfo.getIcon(), mImgIcon);
         mTxtName.setText(mAppInfo.getDisplayName());
 
-//        popupView();
-
-//        extension();
-
         initFragment();
+
+        popupView();
+
+        extension();
     }
 
     private void popupView() {
@@ -87,7 +93,7 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         Bitmap bitmap = getViewImageCache(view);
 
         if (bitmap != null) {
-            mViewContent.setBackground(new BitmapDrawable(getResources(), bitmap));
+            mViewTemp.setBackground(new BitmapDrawable(getResources(), bitmap));
         }
 
         int[] location = new int[2];
@@ -97,7 +103,7 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         int top = location[1];
 
         ViewGroup.MarginLayoutParams marginLayoutParams =
-                new ViewGroup.MarginLayoutParams(mViewContent.getLayoutParams());
+                new ViewGroup.MarginLayoutParams(mViewTemp.getLayoutParams());
         marginLayoutParams.topMargin = top - DensityUtil.getStatusBarH(this);
         marginLayoutParams.leftMargin = left;
         marginLayoutParams.width = view.getWidth();
@@ -105,27 +111,29 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(marginLayoutParams);
 
-        mViewContent.setLayoutParams(params);
+        mViewTemp.setLayoutParams(params);
     }
 
     private void extension() {
 
         int height = DensityUtil.getScreenH(this);
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(mViewContent, "scaleY", 1, (float) height);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(mViewTemp, "scaleY", 1, (float) height);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                initFragment();
+                mCoordinator.setVisibility(View.VISIBLE);
+                mViewTemp.setVisibility(View.GONE);
+
             }
 
             @Override
             public void onAnimationStart(Animator animation) {
-                mViewContent.setBackgroundColor(getResources().getColor(R.color.white));
+                mViewTemp.setBackgroundColor(getResources().getColor(R.color.white));
             }
         });
-        animator.setStartDelay(800);
-        animator.setDuration(10000);
+        animator.setStartDelay(600);
+        animator.setDuration(8000);
         animator.start();
     }
 
@@ -151,5 +159,4 @@ public class AppDetailActivity extends BaseActivity<AppDetailPresenter> {
         transaction.add(R.id.view_content, fragment);
         transaction.commitAllowingStateLoss();
     }
-
 }
