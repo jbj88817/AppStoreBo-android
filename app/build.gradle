@@ -84,4 +84,7 @@ dependencies {
 
     //View behavior
     compile 'com.zoonref:simple-view-behavior:1.0'
+
+    //RxDownload
+    compile project(":rxdownload")
 }
