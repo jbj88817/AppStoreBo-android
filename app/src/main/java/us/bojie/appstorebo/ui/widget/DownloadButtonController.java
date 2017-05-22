@@ -2,6 +2,8 @@ package us.bojie.appstorebo.ui.widget;
 
 import android.content.Context;
 
+import com.jakewharton.rxbinding2.view.RxView;
+
 import java.io.File;
 
 import io.reactivex.Observable;
@@ -9,8 +11,10 @@ import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppDownloadInfo;
 import us.bojie.appstorebo.bean.AppInfo;
+import us.bojie.appstorebo.common.rx.RxSchedulers;
 import us.bojie.appstorebo.common.util.AppUtils;
 import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadEvent;
@@ -28,6 +32,8 @@ public class DownloadButtonController {
 
     public void handClick(final DownloadProgressButton btn, final AppInfo appInfo) {
 
+        bindClick(btn, appInfo);
+
         isAppInstalled(btn.getContext(), appInfo)
                 .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
                     @Override
@@ -44,33 +50,78 @@ public class DownloadButtonController {
                     return getAppDownloadInfo(appInfo).flatMap(new Function<AppDownloadInfo, ObservableSource<DownloadEvent>>() {
                         @Override
                         public ObservableSource<DownloadEvent> apply(@NonNull AppDownloadInfo info) throws Exception {
+                            appInfo.setAppDownloadInfo(info);
                             return receiveDownloadStatus(info);
                         }
                     });
                 }
                 return Observable.just(event);
             }
-        }).subscribe(new Consumer<DownloadEvent>() {
+        })
+        .compose(RxSchedulers.<DownloadEvent>io_main())
+        .subscribe(new DownloadConsumer(btn));
+
+    }
+
+    private void bindClick(final DownloadProgressButton btn, final AppInfo appInfo) {
+        RxView.clicks(btn).subscribe(new Consumer<Object>() {
             @Override
-            public void accept(@NonNull DownloadEvent event) throws Exception {
-                int flag = event.getFlag();
+            public void accept(@NonNull Object o) throws Exception {
+                int flag = (int) btn.getTag(R.id.tag_apk_flag);
+
                 switch (flag) {
                     case DownloadFlag.NORMAL:
-                        btn.download();
+                    case DownloadFlag.PAUSED:
+                        startDownload(btn, appInfo);
                         break;
                     case DownloadFlag.INSTALLED:
-                        btn.setText("RUN");
+                        runApp(btn.getContext(), appInfo);
                         break;
                     case DownloadFlag.STARTED:
-                        btn.setProgress((int) event.getDownloadStatus().getPercentNumber());
+                        pausedDownload(appInfo);
                         break;
-                    case DownloadFlag.PAUSED:
-                        btn.paused();
+                    case DownloadFlag.COMPLETED:
+                        installApp(btn.getContext(), appInfo);
                         break;
+                    //TODO update
                 }
             }
         });
+    }
 
+    private void installApp(Context context, AppInfo appInfo) {
+//        mDownload.getRealFiles()
+        String path = mDownloadDir + File.separator + appInfo.getReleaseKeyHash();
+        AppUtils.installApk(context, path);
+    }
+
+    private void startDownload(final DownloadProgressButton btn, final AppInfo appInfo) {
+        AppDownloadInfo downloadInfo = appInfo.getAppDownloadInfo();
+        if (downloadInfo == null) {
+            getAppDownloadInfo(appInfo).subscribe(new Consumer<AppDownloadInfo>() {
+                @Override
+                public void accept(@NonNull AppDownloadInfo info) throws Exception {
+                    appInfo.setAppDownloadInfo(info);
+                    download(btn, info);
+                }
+            });
+        } else {
+            download(btn, downloadInfo);
+        }
+    }
+
+    private void download(DownloadProgressButton btn, AppDownloadInfo info) {
+        mDownload.serviceDownload(info.getDownloadUrl()).subscribe();
+        mDownload.receiveDownloadStatus(info.getDownloadUrl()).subscribe(new DownloadConsumer(btn));
+    }
+
+    private void pausedDownload(AppInfo appInfo) {
+        AppDownloadInfo downloadInfo = appInfo.getAppDownloadInfo();
+        mDownload.pauseServiceDownload(downloadInfo.getDownloadUrl());
+    }
+
+    private void runApp(Context context, AppInfo info) {
+        AppUtils.runApp(context, info.getPackageName());
     }
 
     public Observable<DownloadEvent> isAppInstalled(Context context, AppInfo appInfo) {
@@ -96,5 +147,34 @@ public class DownloadButtonController {
 
     public Observable<DownloadEvent> receiveDownloadStatus(AppDownloadInfo appDownloadInfo) {
         return mDownload.receiveDownloadStatus(appDownloadInfo.getDownloadUrl());
+    }
+
+    class DownloadConsumer implements Consumer<DownloadEvent> {
+
+        private DownloadProgressButton btn;
+        public DownloadConsumer(DownloadProgressButton btn) {
+            this.btn = btn;
+        }
+
+        @Override
+        public void accept(@NonNull DownloadEvent event) throws Exception {
+            int flag = event.getFlag();
+            btn.setTag(R.id.tag_apk_flag, flag);
+            switch (flag) {
+                case DownloadFlag.NORMAL:
+                    btn.download();
+                    break;
+                case DownloadFlag.INSTALLED:
+                    btn.setText("RUN");
+                    break;
+                case DownloadFlag.STARTED:
+                    btn.setProgress((int) event.getDownloadStatus().getPercentNumber());
+                    break;
+                case DownloadFlag.PAUSED:
+                    btn.paused();
+                    break;
+                //TODO update
+            }
+        }
     }
 }
