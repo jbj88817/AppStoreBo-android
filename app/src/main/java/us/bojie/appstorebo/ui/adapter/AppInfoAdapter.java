@@ -11,6 +11,8 @@ import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.common.imageloader.ImageLoader;
 import us.bojie.appstorebo.data.http.ApiService;
+import us.bojie.appstorebo.ui.widget.DownloadButtonController;
+import us.bojie.appstorebo.ui.widget.DownloadProgressButton;
 
 /**
  * Created by bojiejiang on 5/1/17.
@@ -54,6 +56,15 @@ public class AppInfoAdapter extends BaseQuickAdapter<AppInfo, BaseViewHolder> {
             txtViewBrief.setVisibility(mBuilder.isShowBrief ? View.VISIBLE : View.GONE);
             txtViewBrief.setText(item.getBriefShow());
         }
+
+        TextView textViewSize = helper.getView(R.id.txt_apk_size);
+        if (textViewSize != null) {
+            textViewSize.setText((item.getApkSize() / 1024 / 1024) + "MB");
+        }
+
+        DownloadProgressButton downloadProgressButton = helper.getView(R.id.btn_download);
+        DownloadButtonController.handClick(downloadProgressButton, item);
+
     }
 
     public static class Builder {
