@@ -74,6 +74,7 @@ public class RxDownload {
 
     private DownloadService downloadService;
     private DownloadHelper downloadHelper;
+    private Retrofit mRetrofit;
 
     private RxDownload(Context context) {
         this.context = context.getApplicationContext();
@@ -139,6 +140,7 @@ public class RxDownload {
      * @return instance.
      */
     public RxDownload retrofit(Retrofit retrofit) {
+        mRetrofit = retrofit;
         downloadHelper.setRetrofit(retrofit);
         return this;
     }
@@ -731,5 +733,9 @@ public class RxDownload {
 
     private interface ServiceConnectedCallback {
         void call();
+    }
+
+    public Retrofit getRetrofit() {
+        return mRetrofit;
     }
 }

@@ -11,9 +11,13 @@ import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppDownloadInfo;
 import us.bojie.appstorebo.bean.AppInfo;
+import us.bojie.appstorebo.bean.BaseBean;
+import us.bojie.appstorebo.common.rx.RxHttpReponseCompat;
 import us.bojie.appstorebo.common.rx.RxSchedulers;
 import us.bojie.appstorebo.common.util.AppUtils;
 import zlc.season.rxdownload2.RxDownload;
@@ -28,6 +32,15 @@ public class DownloadButtonController {
 
     private String mDownloadDir;
     private RxDownload mDownload;
+    private Api mApi;
+
+    public DownloadButtonController(RxDownload download) {
+        mDownload = download;
+
+        if (mDownload != null) {
+            mApi = mDownload.getRetrofit().create(Api.class);
+        }
+    }
 
 
     public void handClick(final DownloadProgressButton btn, final AppInfo appInfo) {
@@ -142,7 +155,7 @@ public class DownloadButtonController {
     }
 
     public Observable<AppDownloadInfo> getAppDownloadInfo(AppInfo appInfo) {
-        return null;
+        return mApi.getAppDownloadInfo(appInfo.getId()).compose(RxHttpReponseCompat.<AppDownloadInfo>compatResult());
     }
 
     public Observable<DownloadEvent> receiveDownloadStatus(AppDownloadInfo appDownloadInfo) {
@@ -176,5 +189,10 @@ public class DownloadButtonController {
                 //TODO update
             }
         }
+    }
+
+    interface Api {
+        @GET("download/{id}")
+        Observable<BaseBean<AppDownloadInfo>> getAppDownloadInfo(@Path("id") int id);
     }
 }
