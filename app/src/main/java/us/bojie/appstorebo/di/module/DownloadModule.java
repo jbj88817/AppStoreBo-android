@@ -10,6 +10,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
+import us.bojie.appstorebo.common.Constant;
+import us.bojie.appstorebo.common.util.ACache;
 import zlc.season.rxdownload2.RxDownload;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
@@ -25,6 +27,7 @@ public class DownloadModule {
     @Singleton
     public RxDownload provideRxDownload(Application application, Retrofit retrofit, File downDir) {
 
+        ACache.get(application).put(Constant.APK_DOWNLOAD_DIR, downDir.getPath());
         return RxDownload.getInstance(application)
                 .defaultSavePath(downDir.getPath())
                 .retrofit(retrofit)

@@ -17,8 +17,10 @@ import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppDownloadInfo;
 import us.bojie.appstorebo.bean.AppInfo;
 import us.bojie.appstorebo.bean.BaseBean;
+import us.bojie.appstorebo.common.Constant;
 import us.bojie.appstorebo.common.rx.RxHttpReponseCompat;
 import us.bojie.appstorebo.common.rx.RxSchedulers;
+import us.bojie.appstorebo.common.util.ACache;
 import us.bojie.appstorebo.common.util.AppUtils;
 import us.bojie.appstorebo.common.util.PermissionUtil;
 import zlc.season.rxdownload2.RxDownload;
@@ -33,7 +35,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class DownloadButtonController {
 
-    private String mDownloadDir;
+//    private String mDownloadDir;
     private RxDownload mDownload;
     private Api mApi;
 
@@ -51,14 +53,13 @@ public class DownloadButtonController {
         if (mApi == null) {
             return;
         }
-        bindClick(btn, appInfo);
 
         isAppInstalled(btn.getContext(), appInfo)
                 .flatMap(new Function<DownloadEvent, ObservableSource<DownloadEvent>>() {
                     @Override
                     public ObservableSource<DownloadEvent> apply(@NonNull DownloadEvent event) throws Exception {
                         if (event.getFlag() == DownloadFlag.NOT_INSTALL) {
-                            return isApkFileExist(appInfo);
+                            return isApkFileExist(btn.getContext(), appInfo);
                         }
                         return Observable.just(event);
                     }
@@ -78,7 +79,7 @@ public class DownloadButtonController {
             }
         })
                 .compose(RxSchedulers.<DownloadEvent>io_main())
-                .subscribe(new DownloadConsumer(btn));
+                .subscribe(new DownloadConsumer(btn, appInfo));
 
     }
 
@@ -110,7 +111,7 @@ public class DownloadButtonController {
 
     private void installApp(Context context, AppInfo appInfo) {
 //        mDownload.getRealFiles()
-        String path = mDownloadDir + File.separator + appInfo.getReleaseKeyHash();
+        String path = ACache.get(context).getAsString(Constant.APK_DOWNLOAD_DIR) + File.separator + appInfo.getReleaseKeyHash();
         AppUtils.installApk(context, path);
     }
 
@@ -127,25 +128,25 @@ public class DownloadButtonController {
                                     @Override
                                     public void accept(@NonNull AppDownloadInfo info) throws Exception {
                                         appInfo.setAppDownloadInfo(info);
-                                        download(btn, info);
+                                        download(btn, info, appInfo);
                                     }
                                 });
                             } else {
-                                download(btn, downloadInfo);
+                                download(btn, downloadInfo, appInfo);
                             }
                         }
                     }
                 });
     }
 
-    private void download(DownloadProgressButton btn, AppDownloadInfo info) {
-        mDownload.serviceDownload(info.getDownloadUrl()).subscribe();
-        mDownload.receiveDownloadStatus(info.getDownloadUrl()).subscribe(new DownloadConsumer(btn));
+    private void download(DownloadProgressButton btn, AppDownloadInfo info, AppInfo appInfo) {
+        mDownload.serviceDownload(info.getDownloadUrl(), appInfo.getReleaseKeyHash()).subscribe();
+        mDownload.receiveDownloadStatus(info.getDownloadUrl()).subscribe(new DownloadConsumer(btn, appInfo));
     }
 
     private void pausedDownload(AppInfo appInfo) {
         AppDownloadInfo downloadInfo = appInfo.getAppDownloadInfo();
-        mDownload.pauseServiceDownload(downloadInfo.getDownloadUrl());
+        mDownload.pauseServiceDownload(downloadInfo.getDownloadUrl()).subscribe();
     }
 
     private void runApp(Context context, AppInfo info) {
@@ -159,8 +160,8 @@ public class DownloadButtonController {
         return Observable.just(event);
     }
 
-    public Observable<DownloadEvent> isApkFileExist(AppInfo appInfo) {
-        String path = mDownloadDir + File.separator + appInfo.getReleaseKeyHash();
+    public Observable<DownloadEvent> isApkFileExist(Context context, AppInfo appInfo) {
+        String path = ACache.get(context).getAsString(Constant.APK_DOWNLOAD_DIR) + File.separator + appInfo.getReleaseKeyHash();
         File file = new File(path);
 
         DownloadEvent event = new DownloadEvent();
@@ -180,15 +181,19 @@ public class DownloadButtonController {
     class DownloadConsumer implements Consumer<DownloadEvent> {
 
         private DownloadProgressButton btn;
+        private AppInfo mAppInfo;
 
-        public DownloadConsumer(DownloadProgressButton btn) {
+        public DownloadConsumer(DownloadProgressButton btn, AppInfo appInfo) {
             this.btn = btn;
+            mAppInfo = appInfo;
         }
 
         @Override
         public void accept(@NonNull DownloadEvent event) throws Exception {
             int flag = event.getFlag();
             btn.setTag(R.id.tag_apk_flag, flag);
+            bindClick(btn, mAppInfo);
+
             switch (flag) {
                 case DownloadFlag.NORMAL:
                     btn.download();
@@ -200,7 +205,17 @@ public class DownloadButtonController {
                     btn.setProgress((int) event.getDownloadStatus().getPercentNumber());
                     break;
                 case DownloadFlag.PAUSED:
+                    btn.setProgress((int) event.getDownloadStatus().getPercentNumber());
                     btn.paused();
+                    break;
+                case DownloadFlag.COMPLETED:
+                    btn.setText("Install");
+//                    installApp(btn.getContext(), mAppInfo);
+                    break;
+                case DownloadFlag.FAILED:
+                    btn.setText("Failed");
+                    break;
+                case DownloadFlag.DELETED:
                     break;
                 //TODO update
             }

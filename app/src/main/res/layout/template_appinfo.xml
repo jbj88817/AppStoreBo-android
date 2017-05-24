@@ -60,10 +60,9 @@
                 android:id="@+id/btn_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"/>
-
-
+                android:foreground="?android:attr/selectableItemBackground"/>
         </RelativeLayout>
 
 
