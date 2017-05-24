@@ -20,9 +20,12 @@ import us.bojie.appstorebo.bean.BaseBean;
 import us.bojie.appstorebo.common.rx.RxHttpReponseCompat;
 import us.bojie.appstorebo.common.rx.RxSchedulers;
 import us.bojie.appstorebo.common.util.AppUtils;
+import us.bojie.appstorebo.common.util.PermissionUtil;
 import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadEvent;
 import zlc.season.rxdownload2.entity.DownloadFlag;
+
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * Created by bojiejiang on 5/21/17.
@@ -45,6 +48,9 @@ public class DownloadButtonController {
 
     public void handClick(final DownloadProgressButton btn, final AppInfo appInfo) {
 
+        if (mApi == null) {
+            return;
+        }
         bindClick(btn, appInfo);
 
         isAppInstalled(btn.getContext(), appInfo)
@@ -71,8 +77,8 @@ public class DownloadButtonController {
                 return Observable.just(event);
             }
         })
-        .compose(RxSchedulers.<DownloadEvent>io_main())
-        .subscribe(new DownloadConsumer(btn));
+                .compose(RxSchedulers.<DownloadEvent>io_main())
+                .subscribe(new DownloadConsumer(btn));
 
     }
 
@@ -109,18 +115,27 @@ public class DownloadButtonController {
     }
 
     private void startDownload(final DownloadProgressButton btn, final AppInfo appInfo) {
-        AppDownloadInfo downloadInfo = appInfo.getAppDownloadInfo();
-        if (downloadInfo == null) {
-            getAppDownloadInfo(appInfo).subscribe(new Consumer<AppDownloadInfo>() {
-                @Override
-                public void accept(@NonNull AppDownloadInfo info) throws Exception {
-                    appInfo.setAppDownloadInfo(info);
-                    download(btn, info);
-                }
-            });
-        } else {
-            download(btn, downloadInfo);
-        }
+
+        PermissionUtil.requestPermisson(btn.getContext(), WRITE_EXTERNAL_STORAGE)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(@NonNull Boolean aBoolean) throws Exception {
+                        if (aBoolean) {
+                            AppDownloadInfo downloadInfo = appInfo.getAppDownloadInfo();
+                            if (downloadInfo == null) {
+                                getAppDownloadInfo(appInfo).subscribe(new Consumer<AppDownloadInfo>() {
+                                    @Override
+                                    public void accept(@NonNull AppDownloadInfo info) throws Exception {
+                                        appInfo.setAppDownloadInfo(info);
+                                        download(btn, info);
+                                    }
+                                });
+                            } else {
+                                download(btn, downloadInfo);
+                            }
+                        }
+                    }
+                });
     }
 
     private void download(DownloadProgressButton btn, AppDownloadInfo info) {
@@ -165,6 +180,7 @@ public class DownloadButtonController {
     class DownloadConsumer implements Consumer<DownloadEvent> {
 
         private DownloadProgressButton btn;
+
         public DownloadConsumer(DownloadProgressButton btn) {
             this.btn = btn;
         }

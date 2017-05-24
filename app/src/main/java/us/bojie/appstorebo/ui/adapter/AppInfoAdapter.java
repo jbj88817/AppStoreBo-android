@@ -13,6 +13,7 @@ import us.bojie.appstorebo.common.imageloader.ImageLoader;
 import us.bojie.appstorebo.data.http.ApiService;
 import us.bojie.appstorebo.ui.widget.DownloadButtonController;
 import us.bojie.appstorebo.ui.widget.DownloadProgressButton;
+import zlc.season.rxdownload2.RxDownload;
 
 /**
  * Created by bojiejiang on 5/1/17.
@@ -21,10 +22,12 @@ import us.bojie.appstorebo.ui.widget.DownloadProgressButton;
 public class AppInfoAdapter extends BaseQuickAdapter<AppInfo, BaseViewHolder> {
 
     private Builder mBuilder;
+    private DownloadButtonController mController;
 
     private AppInfoAdapter(Builder builder) {
         super(builder.layoutId);
         mBuilder = builder;
+        mController = new DownloadButtonController(builder.mRxDownload);
         openLoadAnimation();
     }
 
@@ -62,8 +65,9 @@ public class AppInfoAdapter extends BaseQuickAdapter<AppInfo, BaseViewHolder> {
             textViewSize.setText((item.getApkSize() / 1024 / 1024) + "MB");
         }
 
+        helper.addOnClickListener(R.id.btn_download);
         DownloadProgressButton downloadProgressButton = helper.getView(R.id.btn_download);
-        DownloadButtonController.handClick(downloadProgressButton, item);
+        mController.handClick(downloadProgressButton, item);
 
     }
 
@@ -71,6 +75,7 @@ public class AppInfoAdapter extends BaseQuickAdapter<AppInfo, BaseViewHolder> {
         private boolean isShowPosition;
         private boolean isShowCategoryName;
         private boolean isShowBrief;
+        private RxDownload mRxDownload;
 
         private int layoutId = R.layout.template_appinfo;
 
@@ -92,6 +97,11 @@ public class AppInfoAdapter extends BaseQuickAdapter<AppInfo, BaseViewHolder> {
 
         public Builder setLayoutId(int layoutId) {
             this.layoutId = layoutId;
+            return this;
+        }
+
+        public Builder rxDownload(RxDownload rxDownload) {
+            this.mRxDownload = rxDownload;
             return this;
         }
 

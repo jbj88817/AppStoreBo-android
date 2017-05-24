@@ -24,6 +24,7 @@ public class TopListFragment extends BaseAppInfoFragment {
                 .showPosition(true)
                 .showBrief(false)
                 .showCategoryName(true)
+                .rxDownload(mRxDownload)
                 .build();
     }
 

@@ -11,7 +11,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -30,14 +29,14 @@ public class HttpModule {
     @Singleton
     public OkHttpClient provideOkHttpClient(Application application, Gson gson) {
 
-        // log interceptor
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-
-        // All logging body
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        // log interceptor
+//        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+//
+//        // All logging body
+//        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return new OkHttpClient.Builder()
-                .addInterceptor(logging)
+//                .addInterceptor(logging)
                 .addInterceptor(new CommonparamsInterceptor(application, gson))
                 .connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)

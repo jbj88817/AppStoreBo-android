@@ -9,6 +9,8 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.bean.AppInfo;
@@ -17,6 +19,7 @@ import us.bojie.appstorebo.presenter.AppInfoPresenter;
 import us.bojie.appstorebo.presenter.contract.AppInfoContract;
 import us.bojie.appstorebo.ui.activity.AppDetailActivity;
 import us.bojie.appstorebo.ui.adapter.AppInfoAdapter;
+import zlc.season.rxdownload2.RxDownload;
 
 /**
  * Created by bojiejiang on 5/1/17.
@@ -27,6 +30,9 @@ public abstract class BaseAppInfoFragment extends ProgressFragment<AppInfoPresen
 
     @BindView(R.id.recycle_view)
     RecyclerView mRecyclerView;
+
+    @Inject
+    RxDownload mRxDownload;
 
     protected AppInfoAdapter mAdapter;
     int page = 0;
