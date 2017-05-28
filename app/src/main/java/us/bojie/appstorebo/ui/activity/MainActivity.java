@@ -24,6 +24,9 @@ import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 import us.bojie.appstorebo.R;
@@ -34,6 +37,11 @@ import us.bojie.appstorebo.common.imageloader.GlideCircleTransform;
 import us.bojie.appstorebo.common.util.ACache;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.ui.adapter.ViewPagerAdapter;
+import us.bojie.appstorebo.ui.bean.FragmentInfo;
+import us.bojie.appstorebo.ui.fragment.CategoryFragment;
+import us.bojie.appstorebo.ui.fragment.GamesFragment;
+import us.bojie.appstorebo.ui.fragment.RecommendFragment;
+import us.bojie.appstorebo.ui.fragment.TopListFragment;
 
 public class MainActivity extends BaseActivity {
 
@@ -109,7 +117,9 @@ public class MainActivity extends BaseActivity {
                     case R.id.menu_logout:
                         logout();
                         break;
-
+                    case R.id.menu_download_manager:
+                        startActivity(new Intent(MainActivity.this, AppManagerActivity.class));
+                        break;
                 }
                 return false;
             }
@@ -145,9 +155,18 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private List<FragmentInfo> initFragment() {
+        List<FragmentInfo> mFragments = new ArrayList<>(4);
+        mFragments.add(new FragmentInfo("Recommend", RecommendFragment.class));
+        mFragments.add(new FragmentInfo("Ranking", TopListFragment.class));
+        mFragments.add(new FragmentInfo("Games", GamesFragment.class));
+        mFragments.add(new FragmentInfo("Category", CategoryFragment.class));
+        return mFragments;
+    }
+
     private void initTabLayout() {
 
-        PagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        PagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), initFragment());
         mViewPager.setOffscreenPageLimit(adapter.getCount());
         mViewPager.setAdapter(adapter);
         mTabLayout.setupWithViewPager(mViewPager);
