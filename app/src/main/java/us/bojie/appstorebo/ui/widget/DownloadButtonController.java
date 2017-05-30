@@ -47,6 +47,9 @@ public class DownloadButtonController {
         }
     }
 
+    public void handClick(final DownloadProgressButton btn, String url) {
+
+    }
 
     public void handClick(final DownloadProgressButton btn, final AppInfo appInfo) {
 
