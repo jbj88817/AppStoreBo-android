@@ -39,7 +39,7 @@ public class DownloadingAdapter extends BaseQuickAdapter<DownloadRecord, BaseVie
 
         if (viewBtn instanceof DownloadProgressButton) {
             DownloadProgressButton btn = (DownloadProgressButton) viewBtn;
-            mDownloadButtonConntroller.handClick(btn, item.getUrl());
+            mDownloadButtonConntroller.handClick(btn, item);
         }
     }
 }

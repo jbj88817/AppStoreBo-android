@@ -24,8 +24,10 @@ import us.bojie.appstorebo.common.util.ACache;
 import us.bojie.appstorebo.common.util.AppUtils;
 import us.bojie.appstorebo.common.util.PermissionUtil;
 import zlc.season.rxdownload2.RxDownload;
+import zlc.season.rxdownload2.entity.DownloadBean;
 import zlc.season.rxdownload2.entity.DownloadEvent;
 import zlc.season.rxdownload2.entity.DownloadFlag;
+import zlc.season.rxdownload2.entity.DownloadRecord;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -35,7 +37,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class DownloadButtonController {
 
-//    private String mDownloadDir;
+    //    private String mDownloadDir;
     private RxDownload mDownload;
     private Api mApi;
 
@@ -47,9 +49,11 @@ public class DownloadButtonController {
         }
     }
 
-    public void handClick(final DownloadProgressButton btn, String url) {
-
+    public void handClick(final DownloadProgressButton btn, DownloadRecord record) {
+        AppInfo info = downloadRecord2AppInfo(record);
+        receiveDownloadStatus(record.getUrl()).subscribe(new DownloadConsumer(btn, info));
     }
+
 
     public void handClick(final DownloadProgressButton btn, final AppInfo appInfo) {
 
@@ -74,7 +78,7 @@ public class DownloadButtonController {
                         @Override
                         public ObservableSource<DownloadEvent> apply(@NonNull AppDownloadInfo info) throws Exception {
                             appInfo.setAppDownloadInfo(info);
-                            return receiveDownloadStatus(info);
+                            return receiveDownloadStatus(info.getDownloadUrl());
                         }
                     });
                 }
@@ -98,10 +102,10 @@ public class DownloadButtonController {
                         startDownload(btn, appInfo);
                         break;
                     case DownloadFlag.INSTALLED:
-                        runApp(btn.getContext(), appInfo);
+                        runApp(btn.getContext(), appInfo.getPackageName());
                         break;
                     case DownloadFlag.STARTED:
-                        pausedDownload(appInfo);
+                        pausedDownload(appInfo.getAppDownloadInfo().getDownloadUrl());
                         break;
                     case DownloadFlag.COMPLETED:
                         installApp(btn.getContext(), appInfo);
@@ -131,29 +135,60 @@ public class DownloadButtonController {
                                     @Override
                                     public void accept(@NonNull AppDownloadInfo info) throws Exception {
                                         appInfo.setAppDownloadInfo(info);
-                                        download(btn, info, appInfo);
+                                        download(btn, appInfo);
                                     }
                                 });
                             } else {
-                                download(btn, downloadInfo, appInfo);
+                                download(btn, appInfo);
                             }
                         }
                     }
                 });
     }
 
-    private void download(DownloadProgressButton btn, AppDownloadInfo info, AppInfo appInfo) {
-        mDownload.serviceDownload(info.getDownloadUrl(), appInfo.getReleaseKeyHash()).subscribe();
-        mDownload.receiveDownloadStatus(info.getDownloadUrl()).subscribe(new DownloadConsumer(btn, appInfo));
+    private void download(DownloadProgressButton btn, AppInfo appInfo) {
+
+        DownloadBean downloadBean = appInfo2DownloadBean(appInfo);
+
+        mDownload.serviceDownload(downloadBean).subscribe();
+        mDownload.receiveDownloadStatus(appInfo.getAppDownloadInfo().getDownloadUrl())
+                .subscribe(new DownloadConsumer(btn, appInfo));
     }
 
-    private void pausedDownload(AppInfo appInfo) {
-        AppDownloadInfo downloadInfo = appInfo.getAppDownloadInfo();
-        mDownload.pauseServiceDownload(downloadInfo.getDownloadUrl()).subscribe();
+    private DownloadBean appInfo2DownloadBean(AppInfo appInfo) {
+        DownloadBean downloadBean = new DownloadBean();
+        downloadBean.setUrl(appInfo.getAppDownloadInfo().getDownloadUrl());
+        downloadBean.setSaveName(appInfo.getReleaseKeyHash() + ".apk");
+        downloadBean.setExtra1(appInfo.getId() + "");
+        downloadBean.setExtra2(appInfo.getIcon());
+        downloadBean.setExtra3(appInfo.getDisplayName());
+        downloadBean.setExtra4(appInfo.getPackageName());
+        downloadBean.setExtra5(appInfo.getReleaseKeyHash());
+        return downloadBean;
     }
 
-    private void runApp(Context context, AppInfo info) {
-        AppUtils.runApp(context, info.getPackageName());
+    public AppInfo downloadRecord2AppInfo(DownloadRecord bean) {
+        AppInfo appInfo = new AppInfo();
+
+        appInfo.setId(Integer.parseInt(bean.getExtra1()));
+        appInfo.setIcon(bean.getExtra2());
+        appInfo.setDisplayName(bean.getExtra3());
+        appInfo.setPackageName(bean.getExtra4());
+        appInfo.setReleaseKeyHash(bean.getExtra5());
+
+        AppDownloadInfo downloadInfo = new AppDownloadInfo();
+        downloadInfo.setDownloadUrl(bean.getUrl());
+        appInfo.setAppDownloadInfo(downloadInfo);
+
+        return appInfo;
+    }
+
+    private void pausedDownload(String url) {
+        mDownload.pauseServiceDownload(url).subscribe();
+    }
+
+    private void runApp(Context context, String packageName) {
+        AppUtils.runApp(context, packageName);
     }
 
     public Observable<DownloadEvent> isAppInstalled(Context context, AppInfo appInfo) {
@@ -177,8 +212,8 @@ public class DownloadButtonController {
         return mApi.getAppDownloadInfo(appInfo.getId()).compose(RxHttpReponseCompat.<AppDownloadInfo>compatResult());
     }
 
-    public Observable<DownloadEvent> receiveDownloadStatus(AppDownloadInfo appDownloadInfo) {
-        return mDownload.receiveDownloadStatus(appDownloadInfo.getDownloadUrl());
+    public Observable<DownloadEvent> receiveDownloadStatus(String url) {
+        return mDownload.receiveDownloadStatus(url);
     }
 
     class DownloadConsumer implements Consumer<DownloadEvent> {
