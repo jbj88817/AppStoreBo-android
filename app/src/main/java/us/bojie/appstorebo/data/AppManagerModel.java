@@ -24,4 +24,9 @@ public class AppManagerModel implements AppManagerContract.IAppMangerModel {
     public Observable<List<DownloadRecord>> getDownloadRecord() {
         return mRxDownload.getTotalDownloadRecords();
     }
+
+    @Override
+    public RxDownload getRxDownload() {
+        return mRxDownload;
+    }
 }

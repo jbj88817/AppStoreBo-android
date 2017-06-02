@@ -5,8 +5,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -14,6 +12,7 @@ import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.presenter.AppManagerPresenter;
 import us.bojie.appstorebo.presenter.contract.AppManagerContract;
+import us.bojie.appstorebo.ui.adapter.DownloadingAdapter;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
 public class DownloadingFragment extends ProgressFragment<AppManagerPresenter> implements AppManagerContract.AppManagerView {
@@ -22,7 +21,7 @@ public class DownloadingFragment extends ProgressFragment<AppManagerPresenter> i
     @BindView(R.id.recycle_view)
     RecyclerView mRecyclerView;
 
-    private BaseQuickAdapter mAdapter;
+    private DownloadingAdapter mAdapter;
 
     @Override
     public int setLayout() {
@@ -46,7 +45,7 @@ public class DownloadingFragment extends ProgressFragment<AppManagerPresenter> i
 
         mRecyclerView.addItemDecoration(itemDecoration);
 
-//        mAdapter = buildAdapter();
+        mAdapter = new DownloadingAdapter(mPresenter.getRxDownload());
 //        mAdapter.setOnLoadMoreListener(this, mRecyclerView);
 //        mRecyclerView.setAdapter(mAdapter);
 

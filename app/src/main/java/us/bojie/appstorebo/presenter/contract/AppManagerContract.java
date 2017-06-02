@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import us.bojie.appstorebo.ui.BaseView;
+import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
 /**
@@ -18,5 +19,6 @@ public interface AppManagerContract {
 
     interface IAppMangerModel {
         Observable<List<DownloadRecord>> getDownloadRecord();
+        RxDownload getRxDownload();
     }
 }

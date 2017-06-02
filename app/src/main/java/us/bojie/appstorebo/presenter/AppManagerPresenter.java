@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import us.bojie.appstorebo.common.rx.RxSchedulers;
 import us.bojie.appstorebo.common.rx.subscriber.ProgressSubscriber;
 import us.bojie.appstorebo.presenter.contract.AppManagerContract;
+import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadFlag;
 import zlc.season.rxdownload2.entity.DownloadRecord;
 
@@ -32,6 +33,10 @@ public class AppManagerPresenter extends BasePresenter<AppManagerContract.IAppMa
                         mView.showDownloading(records);
                     }
                 });
+    }
+
+    public RxDownload getRxDownload() {
+        return mModel.getRxDownload();
     }
 
     private List<DownloadRecord> downloadRecordFilter(List<DownloadRecord> downloadRecords) {
