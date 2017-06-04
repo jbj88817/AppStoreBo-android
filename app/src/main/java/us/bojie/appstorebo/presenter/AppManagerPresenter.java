@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import us.bojie.appstorebo.common.apkparser.AndroidApk;
 import us.bojie.appstorebo.common.rx.RxSchedulers;
 import us.bojie.appstorebo.common.rx.subscriber.ProgressSubscriber;
 import us.bojie.appstorebo.presenter.contract.AppManagerContract;
@@ -47,5 +48,15 @@ public class AppManagerPresenter extends BasePresenter<AppManagerContract.IAppMa
             }
         }
         return newList;
-    } 
+    }
+
+    public void getLocalAPKs() {
+        mModel.getLocalAPKs().compose(RxSchedulers.<List<AndroidApk>>io_main())
+                .subscribe(new ProgressSubscriber<List<AndroidApk>>(mContext, mView) {
+                    @Override
+                    public void onNext(List<AndroidApk> apks) {
+                        mView.showApps(apks);
+                    }
+                });
+    }
 }

@@ -1,5 +1,7 @@
 package us.bojie.appstorebo.di.module;
 
+import android.app.Application;
+
 import dagger.Module;
 import dagger.Provides;
 import us.bojie.appstorebo.data.AppManagerModel;
@@ -25,9 +27,7 @@ public class AppManagerModule {
     }
 
     @Provides
-    public AppManagerContract.IAppMangerModel provideModel(RxDownload rxDownload) {
-        return new AppManagerModel(rxDownload);
+    public AppManagerContract.IAppMangerModel provideModel(Application application, RxDownload rxDownload) {
+        return new AppManagerModel(application, rxDownload);
     }
-
-
 }

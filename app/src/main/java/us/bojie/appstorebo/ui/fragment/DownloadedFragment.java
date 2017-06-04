@@ -5,13 +5,13 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.List;
 
+import us.bojie.appstorebo.common.apkparser.AndroidApk;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.di.component.DaggerAppManagerComponent;
 import us.bojie.appstorebo.di.module.AppManagerModule;
 import us.bojie.appstorebo.ui.adapter.DownloadingAdapter;
-import zlc.season.rxdownload2.entity.DownloadRecord;
 
-public class DownloadingFragment extends AppManagerFragment {
+public class DownloadedFragment extends AppManagerFragment {
 
 
     private DownloadingAdapter mAdapter;
@@ -19,7 +19,7 @@ public class DownloadingFragment extends AppManagerFragment {
     @Override
     public void init() {
         super.init();
-        mPresenter.getDownloadingApps();
+        mPresenter.getLocalAPKs();
     }
 
     @Override
@@ -38,12 +38,8 @@ public class DownloadingFragment extends AppManagerFragment {
                 .inject(this);
     }
 
-
-
     @Override
-    public void showDownloading(List<DownloadRecord> records) {
-        mAdapter.addData(records);
+    public void showApps(List<AndroidApk> apps) {
+        super.showApps(apps);
     }
-
-
 }
