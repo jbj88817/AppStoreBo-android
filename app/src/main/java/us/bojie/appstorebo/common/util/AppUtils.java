@@ -35,8 +35,11 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import us.bojie.appstorebo.common.apkparser.AndroidApk;
 
 public class AppUtils {
 
@@ -374,5 +377,29 @@ public class AppUtils {
     public static void cleanSharedPreference(Context context) {
         String filepath = String.format(String.format(context.getFilesDir().getParent() + File.separator + "%s", "shared_prefs"));
         FileUtils.deleteFileByDirectory(new File(filepath));
+    }
+
+    public static List<AndroidApk> getInstalledApps(Context context) {
+        PackageManager pm = context.getPackageManager();
+        List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
+        List<AndroidApk> apks = new ArrayList<>(packages.size());
+
+        for (PackageInfo info : packages) {
+            AndroidApk apk = new AndroidApk();
+            apk.setPackageName(info.packageName);
+            apk.setAppVersionCode(info.versionCode + "");
+            apk.setAppVersionName(info.versionName);
+            apk.setLastUpdateTime(info.lastUpdateTime);
+
+            ApplicationInfo applicationInfo = info.applicationInfo;
+            if (applicationInfo != null) {
+                apk.setApkPath(applicationInfo.sourceDir);
+                apk.setAppName(applicationInfo.loadLabel(pm).toString());
+                apk.setDrawable(applicationInfo.loadIcon(pm));
+                apk.setSystem((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0);
+            }
+            apks.add(apk);
+        }
+        return apks;
     }
 }

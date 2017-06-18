@@ -17,6 +17,7 @@ import us.bojie.appstorebo.R;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.ui.adapter.ViewPagerAdapter;
 import us.bojie.appstorebo.ui.bean.FragmentInfo;
+import us.bojie.appstorebo.ui.fragment.DownloadedFragment;
 import us.bojie.appstorebo.ui.fragment.DownloadingFragment;
 
 public class AppManagerActivity extends BaseActivity {
@@ -87,6 +88,8 @@ public class AppManagerActivity extends BaseActivity {
         List<FragmentInfo> mFragments = new ArrayList<>(4);
 
         mFragments.add(new FragmentInfo("Downloading", DownloadingFragment.class));
+        mFragments.add(new FragmentInfo("Downloaded", DownloadedFragment.class));
+//        mFragments.add(new FragmentInfo("Finished", InstalledAppFragment.class));
 
         return mFragments;
 

@@ -17,7 +17,7 @@ import zlc.season.rxdownload2.entity.DownloadRecord;
  * Created by bojiejiang on 5/27/17.
  */
 
-public class AppManagerPresenter extends BasePresenter<AppManagerContract.IAppMangerModel, AppManagerContract.AppManagerView>{
+public class AppManagerPresenter extends BasePresenter<AppManagerContract.IAppMangerModel, AppManagerContract.AppManagerView> {
 
     @Inject
     public AppManagerPresenter(AppManagerContract.IAppMangerModel model, AppManagerContract.AppManagerView view) {
@@ -52,6 +52,16 @@ public class AppManagerPresenter extends BasePresenter<AppManagerContract.IAppMa
 
     public void getLocalAPKs() {
         mModel.getLocalAPKs().compose(RxSchedulers.<List<AndroidApk>>io_main())
+                .subscribe(new ProgressSubscriber<List<AndroidApk>>(mContext, mView) {
+                    @Override
+                    public void onNext(List<AndroidApk> apks) {
+                        mView.showApps(apks);
+                    }
+                });
+    }
+
+    public void getInstalledApps() {
+        mModel.getInstalledApps().compose(RxSchedulers.<List<AndroidApk>>io_main())
                 .subscribe(new ProgressSubscriber<List<AndroidApk>>(mContext, mView) {
                     @Override
                     public void onNext(List<AndroidApk> apks) {

@@ -13,6 +13,7 @@ import io.reactivex.ObservableOnSubscribe;
 import us.bojie.appstorebo.common.Constant;
 import us.bojie.appstorebo.common.apkparser.AndroidApk;
 import us.bojie.appstorebo.common.util.ACache;
+import us.bojie.appstorebo.common.util.AppUtils;
 import us.bojie.appstorebo.presenter.contract.AppManagerContract;
 import zlc.season.rxdownload2.RxDownload;
 import zlc.season.rxdownload2.entity.DownloadRecord;
@@ -54,6 +55,17 @@ public class AppManagerModel implements AppManagerContract.IAppMangerModel {
         });
     }
 
+    @Override
+    public Observable<List<AndroidApk>> getInstalledApps() {
+        return Observable.create(new ObservableOnSubscribe<List<AndroidApk>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<AndroidApk>> e) throws Exception {
+                e.onNext(AppUtils.getInstalledApps(mContext));
+                e.onComplete();
+            }
+        });
+    }
+
     private List<AndroidApk> scanApks(String dir) {
         File file = new File(dir);
         if (!file.isDirectory()) {
@@ -78,6 +90,5 @@ public class AppManagerModel implements AppManagerContract.IAppMangerModel {
         }
 
         return androidApks;
-
     }
 }
