@@ -9,12 +9,12 @@ import us.bojie.appstorebo.common.apkparser.AndroidApk;
 import us.bojie.appstorebo.di.component.AppComponent;
 import us.bojie.appstorebo.di.component.DaggerAppManagerComponent;
 import us.bojie.appstorebo.di.module.AppManagerModule;
-import us.bojie.appstorebo.ui.adapter.DownloadingAdapter;
+import us.bojie.appstorebo.ui.adapter.AndroidApkAdapter;
 
 public class DownloadedFragment extends AppManagerFragment {
 
 
-    private DownloadingAdapter mAdapter;
+    private AndroidApkAdapter mAdapter;
 
     @Override
     public void init() {
@@ -24,7 +24,7 @@ public class DownloadedFragment extends AppManagerFragment {
 
     @Override
     protected RecyclerView.Adapter setupAdapter() {
-        mAdapter = new DownloadingAdapter(mPresenter.getRxDownload());
+        mAdapter = new AndroidApkAdapter(AndroidApkAdapter.FLAG_APK);
         return mAdapter;
     }
 
@@ -40,6 +40,6 @@ public class DownloadedFragment extends AppManagerFragment {
 
     @Override
     public void showApps(List<AndroidApk> apps) {
-        super.showApps(apps);
+        mAdapter.addData(apps);
     }
 }
