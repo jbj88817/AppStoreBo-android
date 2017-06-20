@@ -42,4 +42,7 @@
     <string name="default_loading">loading</string>
     <string name="sign_in">Sign In</string>
     <string name="download">Down</string>
+
+    <string name="accessibility_service_description">Smart Install</string>
+    <string name="smart_install">Smart Install</string>
 </resources>

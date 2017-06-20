@@ -31,8 +31,6 @@ public class InstallAccessibilityService extends AccessibilityService {
             click("完成");
             // 英文
         }
-
-
     }
 
 
