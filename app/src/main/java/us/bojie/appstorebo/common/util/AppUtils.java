@@ -25,6 +25,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import us.bojie.appstorebo.common.apkparser.AndroidApk;
+import us.bojie.appstorebo.service.InstallAccessibilityService;
 
 public class AppUtils {
 
@@ -211,16 +213,47 @@ public class AppUtils {
     }
 
     public static boolean installApk(Context context, String filePath) {
-        File file = new File(filePath);
-        if (!file.exists() || !file.isFile() || file.length() <= 0) {
-            return false;
+        if (isAccessibilityEnabled(context, InstallAccessibilityService.class.getCanonicalName())) {
+            File file = new File(filePath);
+            if (!file.exists() || !file.isFile() || file.length() <= 0) {
+                return false;
+            }
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            return true;
+        } else {
+            context.startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+            return true;
         }
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);
-        return true;
     }
+
+    public static boolean isAccessibilityEnabled(Context context, String serviceName) {
+
+        int ok = 0;
+        try {
+            ok = Settings.Secure.getInt(context.getApplicationContext().getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException e) {
+        }
+
+        TextUtils.SimpleStringSplitter ms = new TextUtils.SimpleStringSplitter(':');
+        if (ok == 1) {
+            String settingValue = Settings.Secure.getString(context.getApplicationContext().getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                ms.setString(settingValue);
+                while (ms.hasNext()) {
+                    String accessibilityService = ms.next();
+                    if (accessibilityService.equalsIgnoreCase(serviceName)) {
+                        return true;
+                    }
+
+                }
+            }
+        }
+        return ok == 1;
+    }
+
 
     public static boolean uninstallApk(Context context, String packageName) {
         if (TextUtils.isEmpty(packageName)) {
